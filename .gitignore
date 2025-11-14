@@ -1,0 +1,29 @@
+# Build results
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.cache
+*.db
+*.pdb
+
+# Backup files
+*.bak
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+
+# Logs
+*.log
+
+# ASP.NET
+appsettings.Development.json
+
+# System / OS
+desktop.ini
+Thumbs.db

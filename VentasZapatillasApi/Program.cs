@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using ventasZapatiilasAPI.Data;
-using ventasZapatiilasAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,8 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("CadenaConexion"))
 );
-
-builder.Services.AddScoped<UsuarioService>();
 
 
 builder.Services.AddControllers();

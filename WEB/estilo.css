@@ -3,5 +3,7 @@ body{
 }
 header {
     margin: 0;
-    background-color: brown;
+    background-color: rgb(250, 213, 213);
+    border-radius: 44;
+    
 }

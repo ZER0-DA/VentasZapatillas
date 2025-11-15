@@ -25,18 +25,5 @@ namespace ventasZapatiilasAPI.Controllers
             var usuarios = await _context.Usuarios.ToListAsync();
             return Ok(usuarios);//200 OK
         }
-
-        [HttpPost("GuardarUsuario")]
-        public async Task<ActionResult<Usuario>> GuardarUsuario(Usuario usuario)
-        {
-            usuario.fecha_registro = DateTime.Now;
-            _context.Usuarios.Add(usuario);
-            await _context.SaveChangesAsync();
-            return StatusCode (StatusCodes.Status201Created, usuario);
-        }
-
-
-
-
     }
 }

@@ -6,6 +6,7 @@ namespace ventasZapatiilasAPI.Models
     [Table("Usuarios")]
     public class Usuario
     {
+
         [Key] 
         public int id_usuario { get; set; }
 

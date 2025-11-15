@@ -7,8 +7,7 @@ namespace ventasZapatiilasAPI.Models
     public class Productos
     {
         [Key]
-        [Column(TypeName = "varchar(10)")]
-        public string id_producto { get; set; } = string.Empty;
+        public int id_producto { get; set; }   
 
         [Required]
         [Column(TypeName = "varchar(100)")]
@@ -28,6 +27,9 @@ namespace ventasZapatiilasAPI.Models
 
         [Required]
         public int stock { get; set; }
+
+        [Column(TypeName = "varchar(300)")]
+        public string? url_imagen { get; set; }
 
         [Column(TypeName = "datetime2")]
         public DateTime fecha_creacion { get; set; }

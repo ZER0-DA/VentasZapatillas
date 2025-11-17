@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda de Zapatillas</title>
+    <link rel="stylesheet" href="css/DiseñoTienda.css">
+</head>
+<body class="fondo-tienda">
+
+    <header class="main-header">
+        <h1>Ｋｉｃｋ Ｖａｅｌｔ</h1>
+    </header>
+
+    <nav class="main-nav">
+        <ul>
+            <li><a href="#" onclick="mostrarSeccion('mujer')">Mujer</a></li>
+            <li><a href="#" onclick="mostrarSeccion('hombre')">Hombres</a></li>
+            <li><a href="#" onclick="mostrarSeccion('ninos')">Niños</a></li>
+            <li><a href="#" onclick="mostrarSeccion('destacados')">Destacados</a></li>
+            <li><a href="#" onclick="mostrarSeccion('ofertas')">Ofertas</a></li>
+        </ul>
+
+        <input type="text" id="buscador" placeholder="Buscar...">
+    </nav>
+
+
+    <!-- Sección Destacados -->
+    <section id="destacados" class="seccion-contenido">
+        <h2 class="titulo-seccion">Zapatillas Destacadas</h2>
+        
+        <div class="productos">
+
+            <div class="producto" 
+                onclick="verProducto('Nike Air Force 1 07 WB', 'imagenes/Zapatilla1.avif', 119.99, 'Zapatillas - Hombre')">
+
+                <span class="etiqueta">NUEVA LLEGADA</span>
+                <img src="imagenes/Zapatilla1.avif" alt="Zapatilla 1">
+                <h3>Nike Air Force 1 '07 WB</h3>
+                <p class="precio">US$ 119.99</p>
+                <p class="categoria">Zapatillas - Hombre</p>
+            </div>
+
+            <div class="producto"
+                onclick="verProducto('Nike Air Max Plus', 'imagenes/Zapatilla2.avif', 199.99, 'Zapatillas - Hombre')">
+
+                <span class="etiqueta">NUEVA LLEGADA</span>
+                <img src="imagenes/Zapatilla2.avif" alt="Zapatilla 2">
+                <h3>Nike Air Max Plus</h3>
+                <p class="precio">US$ 199.99</p>
+                <p class="categoria">Zapatillas - Hombre</p>
+            </div>
+
+            <div class="producto"
+                onclick="verProducto('Jordan Spizike Low', 'imagenes/Zapatilla6.avif', 169.99, 'Zapatillas - Hombre')">
+
+                <span class="etiqueta">NUEVA LLEGADA</span>
+                <img src="imagenes/zapatilla5.avif" alt="Zapatilla 3">
+                <h3>Jordan Spizike Low</h3>
+                <p class="precio">US$ 169.99</p>
+                <p class="categoria">Zapatillas - Hombre</p>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Mujer -->
+    <section id="mujer" class="seccion-contenido" style="display: none;">
+        <h2 class="titulo-seccion">Zapatillas para Mujer</h2>
+        
+        <div class="productos">
+            <div class="producto" 
+                onclick="verProducto('Samba OG Adidas', 'imagenes/zapatilla3muj.jpg', 109.99, 'Mujer')">
+
+                <span class="etiqueta">NUEVO</span>
+                <img src="imagenes/zapatilla3Samba_OG.avif" alt="Zapatilla Mujer 1">
+                <h3>Samba OG Adidas</h3>
+                <p class="precio">US$ 109.99</p>
+                <p class="categoria">Mujer</p>
+            </div>
+
+            <div class="producto"
+                onclick="verProducto('Nike Dunk Low', 'imagenes/zapatilla4muj.jpg', 120.99, 'Mujer')">
+
+                <span class="etiqueta">POPULAR</span>
+                <img src="imagenes/zapatilla4muj.jpg" alt="Zapatilla Mujer 2">
+                <h3>Nike Dunk Low</h3>
+                <p class="precio">US$ 120.99</p>
+                <p class="categoria">Mujer</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Hombre -->
+    <section id="hombre" class="seccion-contenido" style="display: none;">
+        <h2 class="titulo-seccion">Zapatillas para Hombre</h2>
+    </section>
+
+    <!-- Sección Niños -->
+    <section id="ninos" class="seccion-contenido" style="display: none;">
+        <h2 class="titulo-seccion">Zapatillas para Niños</h2>
+
+        <div class="productos">
+            <div class="producto" 
+                onclick="verProducto('Nike Force 1 Low EasyOn', 'imagenes/zapatilla5.jpg', 69.99, 'Niños')">
+
+                <span class="etiqueta">NUEVO</span>
+                <img src="imagenes/zapatilla5.avif" alt="Zapatilla Niño 1">
+                <h3>Nike Force 1 Low EasyOn</h3>
+                <p class="precio">US$ 69.99</p>
+                <p class="categoria">Niños</p>
+            </div>
+        </div>    
+
+
+    </section>
+
+    <!-- Sección Ofertas -->
+    <section id="ofertas" class="seccion-contenido" style="display: none;">
+        <h2 class="titulo-seccion">Ofertas</h2>
+        <p style="text-align:center;">(Aún sin productos... agrégalos luego)</p>
+    </section>
+
+    
+
+
+    <!-- SCRIPT para cambiar secciones -->
+    <script>
+        function mostrarSeccion(seccionID) {
+            const secciones = document.querySelectorAll('.seccion-contenido');
+
+            secciones.forEach(sec => {
+                sec.style.display = "none";
+            });
+
+            document.getElementById(seccionID).style.display = "block";
+
+            // subir al inicio de la página
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+    </script>
+
+    <script src="js/VerProductos.js"></script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const sesion = localStorage.getItem("sesion");
+
+        if (!sesion || sesion !== "activa") {
+            window.location.href = "Login.html";
+        }
+    });
+    </script>
+
+
+</body>
+</html>
+

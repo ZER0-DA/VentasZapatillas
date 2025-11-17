@@ -1,0 +1,80 @@
+.fondo-registro {
+    position: relative;
+    margin: 0;
+    overflow: hidden; 
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    Background-image: url("imagenes/Fondolo.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    font-family: Arial, sans-serif;
+}
+.fondo-registro::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(2, 5, 5, 0.6); 
+    z-index: 1;
+}
+
+.fondo-registro > * {
+    position: relative;
+    z-index: 2;
+}
+
+.main-registro {
+    background: rgba(5, 5, 5, 0.1);
+    backdrop-filter: blur(4px); 
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: -15px 10px 40px #ffa600,
+                15px -15px 40px #0ad6ec;
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    width: 350px;
+    border: 1px solid rgba(255,255,255,0.45); 
+}
+
+.main-registro h2 {
+    text-align: center;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.main-registro input {
+    padding: 12px 15px; 
+    border: none;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: inset 5px 5px 10px #b8bcc2,
+                inset -5px -5px 10px #ffffff;
+    outline: none;
+    font-size: 14px;
+    width: 100%;
+}
+
+.main-registro button {
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    background: #ffffff;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s ease;
+    width: 100px;
+}
+
+.main-registro button:hover {
+    transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(0,255,255,0.5);
+}
+

@@ -1,12 +1,14 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #74ebd5 0%, #9face6 100%);
+    background: linear-gradient(135deg, #0d352d 0%, #9face6 100%);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     margin: 0;
+
+    
 }
 
 .login-container {

@@ -2,18 +2,22 @@
 const API_BASE_URL = 'https://localhost:7030'; 
 const API_LOGIN_URL = `${API_BASE_URL}/api/VerificarLogin/login`; 
 
-// Referencias del DOM
+// ontener datos del formulario 
 const loginForm = document.getElementById('loginForm');
 const correoInput = document.getElementById('correo');
 const contrasenaInput = document.getElementById('contrasena');
 const mensajeEstado = document.getElementById('mensaje-estado');
 
+
+
 function mostrarMensaje(texto, esExito = false) {
     mensajeEstado.textContent = texto;
-    // Remueve las clases anteriores y añade la clase de estado
+   
     mensajeEstado.classList.remove('success', 'error');
     mensajeEstado.classList.add(esExito ? 'success' : 'error');
 }
+
+
 
 loginForm.addEventListener('submit', async (e) => {
     e.preventDefault(); 
@@ -45,18 +49,20 @@ loginForm.addEventListener('submit', async (e) => {
             localStorage.setItem('usuarioCorreo', correo);
             localStorage.setItem('usuarioId', datosRespuesta.usuarioId);
             
+            localStorage.setItem('sesion', 'activa');
+            
             setTimeout(() => {
-                window.location.href = 'pantallaPrincipa.html';
+                window.location.href = 'TiendaDeZapatos.html';
             }, 800);
             
         } else {
             // FALLO (Status 401 Unauthorized)
-            mostrarMensaje(`❌ ERROR (${respuesta.status}): ${datosRespuesta.mensaje || 'Credenciales inválidas.'}`, false);
+            mostrarMensaje(`ERROR (${respuesta.status}): ${datosRespuesta.mensaje || 'Credenciales inválidas.'}`, false);
         }
 
     } catch (error) {
         // Error de red o CORS
-        mostrarMensaje('🔴 Error de red: No se pudo conectar con la API. Verifica CORS.', false);
+        mostrarMensaje('Error de red: No se pudo conectar con la API. Verifica CORS.', false);
         console.error('Error de fetch:', error);
     }
 });

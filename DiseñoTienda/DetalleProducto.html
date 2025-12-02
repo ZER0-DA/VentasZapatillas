@@ -4,34 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalle del Producto</title>
-    <link rel="stylesheet" href="css/DiseñoTienda.css">
+    <link rel="stylesheet" href="css/DetalleProd.css">
 </head>
-<body class="fondo-tienda">
+<body>
 
     <header class="main-header">
-        <h1>Detalles del Producto</h1>
+        <h1>Ｋｉｃｋ Ｖａｅｌｔ</h1>
     </header>
+    
+    <nav class="main-nav">
+        <ul>
+            <li><a href="#" onclick="mostrarSeccion('mujer')">Mujer</a></li>
+            <li><a href="#" onclick="mostrarSeccion('hombre')">Hombres</a></li>
+            <li><a href="#" onclick="mostrarSeccion('ninos')">Niños</a></li>
+            <li><a href="#" onclick="mostrarSeccion('destacados')">Destacados</a></li>
+            <li><a href="#" onclick="mostrarSeccion('ofertas')">Ofertas</a></li>
+        </ul>
+
+        <input type="text" id="buscador" placeholder="Buscar...">
+    </nav>
 
     <main class="detalle-producto">
-        <div id="info-producto"></div>
-        <button onclick="window.location.href='Tienda.html'" class="boton-volver">Volver a la tienda</button>
+        <div class="tarjeta-detalle">
+            <!-- IMAGEN DEL PRODUCTO -->
+            <div class="imagen-producto">
+            <img id="producto-imagen" src="" alt="Producto">
+
+            </div>
+
+            <!-- INFORMACIÓN DEL PRODUCTO -->
+            <div class="info-derecha">
+                <h2 id="producto-nombre"></h2>
+
+                <p id="producto-categoria" class="categoria"></p>
+
+                
+                <span class="etiqueta-stock">✓ Disponible en Stock</span>
+                
+                <p id="producto-precio" class="precio"></p>
+
+                
+                <p id="producto-descripcion" class="descripcion"></p>
+
+
+                <!-- SELECTOR DE TALLAS -->
+                <div class="tallas">
+                    <h3>Selecciona tu talla (US):</h3>
+                    <div id="tallas-container" class="tallas-grid"></div>
+                </div>
+
+
+                <!-- BOTONES DE ACCIÓN -->
+                <div class="botones-container">
+                    <a href="Ventas.html" class="boton-volver">
+                    ← Volver
+                    </a>
+                    
+                    <button class="btn-comprar">
+                        🛒 Agregar al Carrito
+                    </button>
+                </div>
+            </div>
+        </div>
     </main>
 
-    <script>
-        const producto = JSON.parse(localStorage.getItem("productoSeleccionado"));
-        if (producto) {
-            document.getElementById("info-producto").innerHTML = `
-                <div class="tarjeta-detalle">
-                    <img src="${producto.imagen}" alt="${producto.nombre}">
-                    <h2>${producto.nombre}</h2>
-                    <p class="precio">US$ ${producto.precio}</p>
-                    <p class="categoria">${producto.categoria}</p>
-                    <p class="descripcion">Estas zapatillas combinan estilo y comodidad para cualquier ocasión.</p>
-                </div>
-            `;
-        } else {
-            document.getElementById("info-producto").innerHTML = "<p>No se encontró el producto.</p>";
-        }
-    </script>
+<script src="js/DetalleProducto.js"></script>
+
 </body>
 </html>

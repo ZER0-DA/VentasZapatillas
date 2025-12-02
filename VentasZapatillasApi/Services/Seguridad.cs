@@ -5,9 +5,7 @@ namespace ventasZapatiilasAPI.Services
 {
     public class Seguridad
     {
-        // ----------------------------------------------------------------------
-        // CONFIGURACIÓN DE HASHING (Ajustar según necesidad de seguridad)
-        // ----------------------------------------------------------------------
+        
         private const int SaltSize = 16;       // 128 bits para el salt
         private const int HashSize = 32;       // 256 bits para el hash resultante
         private const int Iterations = 100000; // Alto número de iteraciones para resistencia a fuerza bruta
@@ -56,19 +54,15 @@ namespace ventasZapatiilasAPI.Services
         /// <returns>True si la contraseña es correcta, False en caso contrario.</returns>
         public static bool VerificarPassword(string password, byte[] storedHash)
         {
-            // 1. Separar Salt y Hash del valor almacenado
             byte[] salt = new byte[SaltSize];
             Array.Copy(storedHash, 0, salt, 0, SaltSize);
 
             byte[] originalHash = new byte[HashSize];
             Array.Copy(storedHash, SaltSize, originalHash, 0, HashSize);
 
-            // 2. Recalcular el hash con el mismo Salt y Iteraciones
             var pbkdf2 = new Rfc2898DeriveBytes(password, salt, Iterations, HashAlgorithmName.SHA256);
             byte[] newHash = pbkdf2.GetBytes(HashSize);
 
-            // 3. Comparar el nuevo hash con el hash almacenado
-            // Usamos una función segura para evitar ataques de temporización.
             return CryptographicOperations.FixedTimeEquals(originalHash, newHash);
         }
     }

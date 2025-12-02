@@ -1,0 +1,161 @@
+/* Estilos generales del contenedor */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right,  #0a2963, #3c3b3b, #0d407a);
+    padding: 20px;
+}
+
+.container {
+    max-width: 700px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo del formulario */
+.cms h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 25px;
+}
+
+/* Grupos de inputs */
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.input-group input[type="text"],
+.input-group input[type="number"],
+.input-group select,
+.input-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Incluye padding y borde en el ancho total */
+}
+
+.input-group textarea {
+    resize: vertical;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background-color: #e0e0e0;
+    margin: 25px 0;
+}
+
+/* Estilos para los campos de Talla/Stock (Variantes) */
+h3 {
+    margin-top: 20px;
+    color: #333;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+}
+
+#stock-variants-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.variant-row {
+    display: flex;
+    gap: 15px;
+    align-items: flex-end; /* Alinea los botones de eliminar al final */
+    border: 1px solid #f0f0f0;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #fafafa;
+}
+
+.variant-input {
+    flex-grow: 1;
+}
+
+.variant-input input {
+    width: 100%;
+}
+
+.remove-button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.remove-button:hover {
+    background-color: #cc0000;
+}
+
+/* Estilos para botones de acción */
+.add-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 4px;
+    width: 100%;
+    margin-top: 10px;
+    transition: background-color 0.2s;
+}
+
+.add-button:hover {
+    background-color: #45a049;
+}
+
+.Ingresar-button {
+    background-color: #1a73e8;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    width: 100%;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.Ingresar-button:hover {
+    background-color: #0b50b5;
+}
+
+/* Estilos para Checkboxes (Estados y Oferta) */
+.input-group-checks {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 15px;
+}
+
+.check-item {
+    display: flex;
+    align-items: center;
+}
+
+.check-item input[type="checkbox"] {
+    margin-right: 8px;
+    width: 20px;
+    height: 20px;
+}
+
+.check-item label {
+    font-weight: normal;
+    user-select: none; /* Evita selección de texto al hacer clic */
+}

@@ -5,18 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrarse</title>
     <link rel="stylesheet" href="css/DiseñoRegistroUs.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="fondo-registro">
 
-    <div class="main-registro">
+<body>
+
+    <div class="registro-container">
+
+        <form id="registrarUsuario" class="registrar-usuario">
+
         <h2>Registrarse</h2>
-        <input type="text" id="usuario" class="input" placeholder="Nombre de usuario">
-        <input type="text" id="corre" class="input" placeholder="Correo Electronico">
-        <input type="password" id="clave" class="input" placeholder="Contraseña">
-        <input type="password" id="confirmarClave" class="input" placeholder="Confirmar contraseña">
 
-        <button class="button" onclick="RegistrarUsuarioNue()">Registrarse</button>
-     
+        <div class="input-group">
+            <label for="nombre">Nombre de usuario</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
+        </div>
+
+        <div class="input-group">
+            <label for="correo">Correo Electrónico</label>
+            <input type="email" id="correo" name="correo" placeholder="Ingrese su correo" required>
+        </div>
+
+        <div class="input-group">
+            <label for="contrasena">Contraseña</label>
+            <input type="password" id="contrasena" name="contrasena" placeholder="Ingrese su contraseña" required>
+            <i class="fa-solid fa-eye" id="togglePassword"></i>
+        </div>
+
+        <button type="submit"  class="btResgistrar">Registrarse</button>
+
+        <p id="mensaje-estado" class="message"></p>
+
+        <div class="links">
+                
+                <a href="Login.html">Ya tengo una cuenta</a>
+            
+        </div>
+
+
+        </form>
+
     </div>
+
+    <script src="js/CrearCuenta.js"></script>
+
 </body>
 </html>

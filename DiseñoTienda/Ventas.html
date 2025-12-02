@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda de Zapatillas</title>
+    <link rel="stylesheet" href="css/disTienda.css">
+</head>
+<body class="fondo-tienda">
+
+<header class="main-header">
+    <h1>Ｋｉｃｋ Ｖａｅｌｔ</h1>
+</header>
+
+<nav class="main-nav">
+    <ul>
+        <li><a href="#" onclick="mostrarSeccion('mujer')">Mujer</a></li>
+        <li><a href="#" onclick="mostrarSeccion('hombre')">Hombres</a></li>
+        <li><a href="#" onclick="mostrarSeccion('ninos')">Niños</a></li>
+        <li><a href="#" onclick="mostrarSeccion('destacados')">Destacados</a></li>
+        <li><a href="#" onclick="mostrarSeccion('ofertas')">Ofertas</a></li>
+        <li><a href="carrito.html">Carrito</a></li>
+     
+    </ul>
+
+    <input type="text" id="buscador" placeholder="Buscar...">
+</nav>
+
+<h2 class="titulo-seccion">Zapatillas Destacadas</h2>
+<div id="productos-container" class="grid-productos"></div>
+
+
+<script>
+    const API_URL = "https://localhost:7030/api/Productos/ObtenerProductos";
+
+    async function cargarProductos() {
+        try {
+            const respuesta = await fetch(API_URL);
+            const productos = await respuesta.json();
+
+            const contenedor = document.getElementById("productos-container");
+            contenedor.innerHTML = "";
+
+            productos.forEach(p => {
+                const imagenUrl = p.urlImagen
+                    ? (p.urlImagen.startsWith("/") 
+                        ? `https://localhost:7030${p.urlImagen}` 
+                        : p.urlImagen)
+                    : "img/default.jpg";
+
+                const card = document.createElement("div");
+                card.classList.add("producto-card");
+
+                card.innerHTML = `
+                    <img 
+                        src="${imagenUrl}" 
+                        class="producto-imagen"
+                        onclick="verDetalle(${p.id})"
+                    >
+
+                    <span class="producto-etiqueta">${p.marca}</span>
+
+                    <h3 
+                        class="producto-nombre"
+                        onclick="verDetalle(${p.id})"
+                        style="cursor:pointer"
+                    >
+                        ${p.modelo}
+                    </h3>
+
+                    <p class="producto-precio">$${p.precio}</p>
+
+                    <p class="producto-categoria">${p.seccion}</p>
+
+                    <button class="producto-boton" onclick="agregarAlCarrito(${p.id})">
+                        Agregar al carrito
+                    </button>
+                `;
+
+                contenedor.appendChild(card);
+            });
+
+        } catch (error) {
+            console.error("Error cargando productos:", error);
+        }
+    }
+
+    function verDetalle(id) {
+        window.location.href = `DetalleProducto.html?id=${id}`;
+    }
+
+    cargarProductos();
+</script>
+
+</body>
+</html>

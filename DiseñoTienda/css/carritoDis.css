@@ -1,0 +1,13 @@
+
+body{
+    background-color: bisque;
+    display: flex;
+    align-content: center;
+}
+
+
+.carrito-container{
+    background-color: rgb(64, 150, 121);
+    padding: 20px;
+
+}

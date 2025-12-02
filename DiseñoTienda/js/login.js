@@ -1,4 +1,19 @@
-// *** CONFIGURACIÓN DE LA API: ¡ACTUALIZA ESTA URL! ***
+
+//diseño 
+const togglePassword = document.querySelector('#togglePassword');
+const passwordInput = document.querySelector('#contrasena');
+
+togglePassword.addEventListener('click', function () {
+
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+
+    this.classList.toggle('fa-eye')
+    this.classList.toggle('fa-eye-slash');
+});
+
+
+//Conexión a la Api
 const API_BASE_URL = 'https://localhost:7030'; 
 const API_LOGIN_URL = `${API_BASE_URL}/api/VerificarLogin/login`; 
 
@@ -12,7 +27,6 @@ const mensajeEstado = document.getElementById('mensaje-estado');
 
 function mostrarMensaje(texto, esExito = false) {
     mensajeEstado.textContent = texto;
-   
     mensajeEstado.classList.remove('success', 'error');
     mensajeEstado.classList.add(esExito ? 'success' : 'error');
 }
@@ -52,12 +66,14 @@ loginForm.addEventListener('submit', async (e) => {
             localStorage.setItem('sesion', 'activa');
             
             setTimeout(() => {
-                window.location.href = 'TiendaDeZapatos.html';
+                window.location.href = 'Ventas.html';
             }, 800);
             
         } else {
             // FALLO (Status 401 Unauthorized)
             mostrarMensaje(`ERROR (${respuesta.status}): ${datosRespuesta.mensaje || 'Credenciales inválidas.'}`, false);
+
+            
         }
 
     } catch (error) {

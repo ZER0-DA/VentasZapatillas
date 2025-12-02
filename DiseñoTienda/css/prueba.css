@@ -1,0 +1,6 @@
+body{
+    background-color: #ffffff;
+}
+
+.prubea-fondo{background: color #f3f3f3;;padding:20px;border:1px solid #e0e0e0;border-radius:5px;box-shadow:0 2px 5px rgba(0,0,0,0.1);text-align:center;display:inline-block}
+.prubea-fondo img{max-width:100%;height:auto;border:none }

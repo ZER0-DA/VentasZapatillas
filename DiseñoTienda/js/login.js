@@ -1,5 +1,4 @@
 
-//diseño 
 const togglePassword = document.querySelector('#togglePassword');
 const passwordInput = document.querySelector('#contrasena');
 
@@ -13,11 +12,10 @@ togglePassword.addEventListener('click', function () {
 });
 
 
-//Conexión a la Api
 const API_BASE_URL = 'https://localhost:7030'; 
 const API_LOGIN_URL = `${API_BASE_URL}/api/VerificarLogin/login`; 
 
-// ontener datos del formulario 
+
 const loginForm = document.getElementById('loginForm');
 const correoInput = document.getElementById('correo');
 const contrasenaInput = document.getElementById('contrasena');
@@ -37,7 +35,7 @@ loginForm.addEventListener('submit', async (e) => {
     e.preventDefault(); 
     
     const correo = correoInput.value;
-    const password = contrasenaInput.value; // Mapea a 'password' en el JSON
+    const password = contrasenaInput.value; 
     
     const datosLogin = {
         correo: correo, 
@@ -57,7 +55,7 @@ loginForm.addEventListener('submit', async (e) => {
 
         if (respuesta.ok) {
             // ÉXITO (Status 200 OK)
-            mostrarMensaje(`✅ ${datosRespuesta.mensaje}`, true);
+            mostrarMensaje(`${datosRespuesta.mensaje}`, true);
             
             // Almacena datos y redirige
             localStorage.setItem('usuarioCorreo', correo);
@@ -70,14 +68,14 @@ loginForm.addEventListener('submit', async (e) => {
             }, 800);
             
         } else {
-            // FALLO (Status 401 Unauthorized)
+
             mostrarMensaje(`ERROR (${respuesta.status}): ${datosRespuesta.mensaje || 'Credenciales inválidas.'}`, false);
 
             
         }
 
     } catch (error) {
-        // Error de red o CORS
+    
         mostrarMensaje('Error de red: No se pudo conectar con la API. Verifica CORS.', false);
         console.error('Error de fetch:', error);
     }

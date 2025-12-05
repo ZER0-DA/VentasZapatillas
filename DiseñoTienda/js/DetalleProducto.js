@@ -1,4 +1,4 @@
-// Obtener ID del producto desde la URL
+
 const params = new URLSearchParams(window.location.search);
 const productoId = params.get("id");
 
@@ -7,7 +7,7 @@ if (!productoId) {
     throw new Error("ID no encontrado");
 }
 
-// Endpoint correcto SEGÚN TU API
+
 const API_URL = `https://localhost:7030/api/Productos/${productoId}`;
 
 async function cargarDetalleProducto() {
@@ -20,7 +20,6 @@ async function cargarDetalleProducto() {
 
         const producto = await respuesta.json();
 
-        // ---------- IMAGEN ----------
         const imagenUrl = producto.urlImagen
             ? (producto.urlImagen.startsWith("/")
                 ? `https://localhost:7030${producto.urlImagen}`
@@ -29,20 +28,15 @@ async function cargarDetalleProducto() {
 
         document.getElementById("producto-imagen").src = imagenUrl;
 
-        // ---------- NOMBRE ----------
         document.getElementById("producto-nombre").textContent = producto.modelo;
 
-        // ---------- CATEGORÍA ----------
         document.getElementById("producto-categoria").textContent = producto.seccion;
 
-        // ---------- PRECIO ----------
         document.getElementById("producto-precio").textContent = "$" + producto.precio;
 
-        // ---------- DESCRIPCIÓN ----------
         document.getElementById("producto-descripcion").textContent =
             producto.descripcion || "Sin descripción disponible.";
 
-        // ---------- TALLAS (Variantes) ----------
         const tallasContainer = document.getElementById("tallas-container");
         tallasContainer.innerHTML = "";
 

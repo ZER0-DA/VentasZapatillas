@@ -6,7 +6,7 @@
     <title>Tienda de Zapatillas</title>
     <link rel="stylesheet" href="css/disTienda.css">
 </head>
-<body class="fondo-tienda">
+<body>
 
 <header class="main-header">
     <h1>Ｋｉｃｋ Ｖａｅｌｔ</h1>
@@ -14,32 +14,64 @@
 
 <nav class="main-nav">
     <ul>
-        <li><a href="#" onclick="mostrarSeccion('mujer')">Mujer</a></li>
-        <li><a href="#" onclick="mostrarSeccion('hombre')">Hombres</a></li>
-        <li><a href="#" onclick="mostrarSeccion('ninos')">Niños</a></li>
-        <li><a href="#" onclick="mostrarSeccion('destacados')">Destacados</a></li>
-        <li><a href="#" onclick="mostrarSeccion('ofertas')">Ofertas</a></li>
-        <li><a href="carrito.html">Carrito</a></li>
-     
+        <li><a href="#" data-seccion="mujer" onclick="mostrarSeccion('mujer', event)">Mujer</a></li>
+        <li><a href="#" data-seccion="hombre" onclick="mostrarSeccion('hombre', event)">Hombres</a></li>
+        <li><a href="#" data-seccion="niños" onclick="mostrarSeccion('niños', event)">Niños</a></li>
+        <li><a href="#" data-seccion="destacados" onclick="mostrarSeccion('destacados', event)" class="active">Destacados</a></li>
+        <li><a href="#" data-seccion="ofertas" onclick="mostrarSeccion('ofertas', event)">Ofertas</a></li>
     </ul>
 
     <input type="text" id="buscador" placeholder="Buscar...">
 </nav>
 
-<h2 class="titulo-seccion">Zapatillas Destacadas</h2>
-<div id="productos-container" class="grid-productos"></div>
-
+<h2 class="titulo-seccion" id="titulo-seccion">Zapatillas Destacadas</h2>
+<div id="productos-container" class="grid-productos">
+    <p class="mensaje-carga">Cargando productos...</p>
+</div>
 
 <script>
-    const API_URL = "https://localhost:7030/api/Productos/ObtenerProductos";
+    const API_BASE_URL = "https://localhost:7030/api/Productos";
+    let seccionActual = "destacados";
 
-    async function cargarProductos() {
+    const titulosPorSeccion = {
+        'mujer': 'Zapatillas para Mujer',
+        'hombre': 'Zapatillas para Hombre',
+        'niños': 'Zapatillas para Niños',
+        'destacados': 'Zapatillas Destacadas',
+        'ofertas': 'Ofertas Especiales'
+    };
+
+    async function cargarProductos(seccion = 'destacados') {
         try {
-            const respuesta = await fetch(API_URL);
+            const contenedor = document.getElementById("productos-container");
+            contenedor.innerHTML = '<p class="mensaje-carga">Cargando productos...</p>';
+
+            let url;
+            if (seccion === 'destacados') {
+                url = `${API_BASE_URL}/destacados`;
+            } else {
+                url = `${API_BASE_URL}/seccion/${seccion}`;
+            }
+
+            const respuesta = await fetch(url);
+            
+            if (!respuesta.ok) {
+                throw new Error(`Error ${respuesta.status}: ${respuesta.statusText}`);
+            }
+
             const productos = await respuesta.json();
 
-            const contenedor = document.getElementById("productos-container");
+            // Actualizar título de la sección
+            const tituloSeccion = document.getElementById("titulo-seccion");
+            tituloSeccion.textContent = titulosPorSeccion[seccion] || `Zapatillas - ${seccion}`;
+
+            // Limpiar contenedor
             contenedor.innerHTML = "";
+
+            if (productos.length === 0) {
+                contenedor.innerHTML = '<p class="mensaje-carga">No hay productos disponibles en esta sección.</p>';
+                return;
+            }
 
             productos.forEach(p => {
                 const imagenUrl = p.urlImagen
@@ -56,21 +88,21 @@
                         src="${imagenUrl}" 
                         class="producto-imagen"
                         onclick="verDetalle(${p.id})"
+                        alt="${p.modelo}"
                     >
 
-                    <span class="producto-etiqueta">${p.marca}</span>
+                    <span class="producto-etiqueta">${p.marca || 'Sin marca'}</span>
 
                     <h3 
                         class="producto-nombre"
                         onclick="verDetalle(${p.id})"
-                        style="cursor:pointer"
                     >
-                        ${p.modelo}
+                        ${p.modelo || 'Sin nombre'}
                     </h3>
 
-                    <p class="producto-precio">$${p.precio}</p>
+                    <p class="producto-precio">$${p.precio ? p.precio.toFixed(2) : '0.00'}</p>
 
-                    <p class="producto-categoria">${p.seccion}</p>
+                    <p class="producto-categoria">${p.seccion || 'Sin categoría'}</p>
 
                     <button class="producto-boton" onclick="agregarAlCarrito(${p.id})">
                         Agregar al carrito
@@ -82,14 +114,88 @@
 
         } catch (error) {
             console.error("Error cargando productos:", error);
+            const contenedor = document.getElementById("productos-container");
+            contenedor.innerHTML = `
+                <div class="mensaje-error">
+                    <h3>Error al cargar productos</h3>
+                    <p>${error.message}</p>
+                    <p>Por favor, verifica que el servidor esté funcionando.</p>
+                </div>
+            `;
         }
+    }
+
+    function mostrarSeccion(seccion, event) {
+        if (event) {
+            event.preventDefault();
+        }
+
+        // Actualizar sección actual
+        seccionActual = seccion;
+
+        // Actualizar clase active en el menú
+        document.querySelectorAll('.main-nav a').forEach(link => {
+            link.classList.remove('active');
+        });
+
+        if (event && event.target) {
+            event.target.classList.add('active');
+        } else {
+            // Si no hay evento, buscar el enlace por data-seccion
+            const link = document.querySelector(`[data-seccion="${seccion}"]`);
+            if (link) {
+                link.classList.add('active');
+            }
+        }
+
+        // Cargar productos de la sección
+        cargarProductos(seccion);
     }
 
     function verDetalle(id) {
         window.location.href = `DetalleProducto.html?id=${id}`;
     }
 
-    cargarProductos();
+    function agregarAlCarrito(id) {
+        // Obtener carrito del localStorage
+        let carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
+        
+        // Verificar si el producto ya está en el carrito
+        const indiceExistente = carrito.findIndex(item => item.id === id);
+        
+        if (indiceExistente !== -1) {
+            // Si existe, incrementar cantidad
+            carrito[indiceExistente].cantidad++;
+        } else {
+            // Si no existe, agregar nuevo item
+            carrito.push({ id: id, cantidad: 1 });
+        }
+        
+        // Guardar en localStorage
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+        
+        // Mostrar confirmación
+        alert('Producto agregado al carrito');
+    }
+
+    // Funcionalidad del buscador
+    document.getElementById('buscador').addEventListener('input', function(e) {
+        const termino = e.target.value.toLowerCase();
+        const cards = document.querySelectorAll('.producto-card');
+        
+        cards.forEach(card => {
+            const nombre = card.querySelector('.producto-nombre').textContent.toLowerCase();
+            const marca = card.querySelector('.producto-etiqueta').textContent.toLowerCase();
+            
+            if (nombre.includes(termino) || marca.includes(termino)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+
+    cargarProductos('destacados');
 </script>
 
 </body>

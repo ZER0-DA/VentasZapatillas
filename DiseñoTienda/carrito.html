@@ -1,15 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrito</title>
+    <title>Tienda de Zapatillas</title>
     <link rel="stylesheet" href="css/carritoDis.css">
 </head>
-<body>
-    <div class="carrito-container">
-        <h1>Acá va el carrito</h1>
-    </div>
-    
+<body class="fondo-tienda">
+
+<header class="main-header">
+    <h1>Ｋｉｃｋ Ｖａｅｌｔ</h1>
+</header>
+
+<nav class="main-nav">
+    <ul>
+        <li><a href="#" onclick="mostrarSeccion('mujer')">Mujer</a></li>
+        <li><a href="#" onclick="mostrarSeccion('hombre')">Hombres</a></li>
+        <li><a href="#" onclick="mostrarSeccion('ninos')">Niños</a></li>
+        <li><a href="#" onclick="mostrarSeccion('destacados')">Destacados</a></li>
+        <li><a href="#" onclick="mostrarSeccion('ofertas')">Ofertas</a></li>
+        <li><a href="carrito.html">Carrito</a></li>
+     
+    </ul>
+
+    <input type="text" id="buscador" placeholder="Buscar...">
+</nav>
+
+
+
+
+        <div class="detalle-pedido">
+            <h2>Detalle del pedido</h2>
+        </div>
+
+        <div class="pedido">
+            <h1>PEDIDO</h1>
+        </div>
 </body>
 </html>

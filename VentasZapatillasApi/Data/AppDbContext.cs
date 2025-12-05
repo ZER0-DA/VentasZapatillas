@@ -11,6 +11,7 @@ namespace ventasZapatiilasAPI.Data
         public DbSet<Producto> Productos { get; set; }
         public DbSet<ProductoVariante> ProductoVariantes { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Carrito> Carrito { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

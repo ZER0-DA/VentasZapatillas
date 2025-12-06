@@ -14,15 +14,14 @@
     
     <nav class="main-nav">
         <ul>
-            <li><a href="#" onclick="mostrarSeccion('mujer')">Mujer</a></li>
-            <li><a href="#" onclick="mostrarSeccion('hombre')">Hombres</a></li>
-            <li><a href="#" onclick="mostrarSeccion('ninos')">Niños</a></li>
-            <li><a href="#" onclick="mostrarSeccion('destacados')">Destacados</a></li>
-            <li><a href="#" onclick="mostrarSeccion('ofertas')">Ofertas</a></li>
-            <li><a href="carrito.html">Carrito</a></li>
+            <li><a href="Ventas.html?seccion=mujer">Mujer</a></li>
+            <li><a href="Ventas.html?seccion=hombre">Hombres</a></li>
+            <li><a href="Ventas.html?seccion=niños">Niños</a></li>
+            <li><a href="Ventas.html?seccion=destacados">Destacados</a></li>
+            <li><a href="Ventas.html?seccion=ofertas">Ofertas</a></li>
         </ul>
 
-        <input type="text" id="buscador" placeholder="Buscar...">
+        <input type="text" id="buscador" placeholder="Ir a productos para buscar" disabled title="Regresa a productos para buscar">
     </nav>
 
     <main class="detalle-producto">
@@ -70,6 +69,8 @@
     </main>
 
 <script src="js/DetalleProducto.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/carrito.js"></script>
 
 </body>
 </html>

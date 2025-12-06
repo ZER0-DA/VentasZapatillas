@@ -3,38 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tienda de Zapatillas</title>
+    <title>Mi Carrito - Kick Vaelt</title>
+    <link rel="stylesheet" href="css/disTienda.css"> 
     <link rel="stylesheet" href="css/carritoDis.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body class="fondo-tienda">
 
-<header class="main-header">
-    <h1>Ｋｉｃｋ Ｖａｅｌｔ</h1>
-</header>
+    <header class="main-header">
+        <h1>Ｋｉｃｋ Ｖａｅｌｔ</h1>
+    </header>
 
-<nav class="main-nav">
-    <ul>
-        <li><a href="#" onclick="mostrarSeccion('mujer')">Mujer</a></li>
-        <li><a href="#" onclick="mostrarSeccion('hombre')">Hombres</a></li>
-        <li><a href="#" onclick="mostrarSeccion('ninos')">Niños</a></li>
-        <li><a href="#" onclick="mostrarSeccion('destacados')">Destacados</a></li>
-        <li><a href="#" onclick="mostrarSeccion('ofertas')">Ofertas</a></li>
-        <li><a href="carrito.html">Carrito</a></li>
-     
-    </ul>
+    <!-- Badge del carrito -->
+    <div class="carrito-badge" id="carritoBadge" onclick="irAlCarrito()" title="Ver carrito">
+        <span id="cantidadCarrito">0</span>
+    </div>
 
-    <input type="text" id="buscador" placeholder="Buscar...">
-</nav>
+    <!-- Navegación que redirige a Ventas.html con parámetros -->
+    <nav class="main-nav">
+        <ul>
+            <li><a href="Ventas.html?seccion=mujer">Mujer</a></li>
+            <li><a href="Ventas.html?seccion=hombre">Hombres</a></li>
+            <li><a href="Ventas.html?seccion=niños">Niños</a></li>
+            <li><a href="Ventas.html?seccion=destacados">Destacados</a></li>
+            <li><a href="Ventas.html?seccion=ofertas">Ofertas</a></li>
+        </ul>
 
+        <input type="text" id="buscador" placeholder="Ir a productos para buscar" disabled title="Regresa a productos para buscar">
+    </nav>
 
+    <main class="carrito-main-container">
+        <h2 class="titulo-seccion">Mi Carrito de Compras 🛍️</h2>
+        <div id="mensaje-estado-carrito" class="mensaje-general"></div>
 
+        <section id="carrito-contenido">
+            
+            <table id="tabla-carrito">
+                <thead>
+                    <tr>
+                        <th class="col-producto">Producto</th>
+                        <th class="col-precio">Precio</th>
+                        <th class="col-cantidad">Cantidad</th>
+                        <th class="col-subtotal">Subtotal</th>
+                        <th class="col-accion">Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody id="items-carrito-body">
+                </tbody>
+            </table>
 
-        <div class="detalle-pedido">
-            <h2>Detalle del pedido</h2>
-        </div>
+            <div class="carrito-footer">
+                <div class="acciones-botones">
+                    <button id="vaciar-carrito-btn" class="btn-rojo" onclick="vaciarCarrito()">
+                        <i class="fas fa-trash-alt"></i> Vaciar Carrito
+                    </button>
+                    <a href="Ventas.html" class="btn-volver">
+                        Continuar Comprando
+                    </a>
+                </div>
 
-        <div class="pedido">
-            <h1>PEDIDO</h1>
-        </div>
+                <div class="resumen-pedido">
+                    <h3>Resumen del Pedido</h3>
+                    <p>Total artículos únicos: <span id="total-productos-badge">0</span></p>
+                    <p class="resumen-total-cantidad">Cantidad total de productos: <span id="cantidadTotal">0</span></p>
+                    <h2 class="total-a-pagar">Total a pagar: <span id="total-a-pagar">$0.00</span></h2>
+                    
+                    <button id="proceder-pago-btn" class="btn-principal" disabled>
+                        Finalizar Compra
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="carrito-vacio-mensaje" class="mensaje-carrito-vacio" style="display: none;">
+            <h2>Tu carrito está vacío 😢</h2>
+            <p>¡No pierdas la oportunidad! Agrega tus zapatillas favoritas.</p>
+            <a href="Ventas.html" class="btn-volver">Ver Productos Destacados</a>
+        </section>
+
+    </main>
+
+    <!-- Cargar scripts en orden correcto -->
+    <script src="js/utils.js"></script>
+    <script src="js/carrito.js"></script>
 </body>
 </html>

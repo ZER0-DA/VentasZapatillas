@@ -66,7 +66,7 @@ registrarUsaurio.addEventListener('submit', async (e) => {
             mostrarMensaje(`✅ ${datosRespuesta.mensaje || 'Registro exitoso.'}`, true);
 
             setTimeout(() => {
-                window.location.href = 'TiendaDeZapatos.html';
+                window.location.href = 'Ventas.html';
             }, 800);
 
         } else {

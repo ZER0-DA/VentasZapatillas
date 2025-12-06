@@ -44,7 +44,11 @@ namespace ventasZapatiilasAPI.Controllers
 
             string token = _tokenService.CrearToken(usuario);
 
-            return Ok(new { mensaje = "Login exitoso" });
+            return Ok(new {
+                mensaje = "Login exitoso",
+                token = token, 
+                usuarioId = usuario.id_usuario
+            });
         }
     }
 }

@@ -9,7 +9,7 @@ namespace ventasZapatiilasAPI.Models
     {
         [Key]
         [Column("id_producto")]
-        public int Id { get; set; }
+        public int IdProducto { get; set; }
 
         [Column("nombre_modelo")]
         public required string Modelo { get; set; } 

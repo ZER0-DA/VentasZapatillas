@@ -25,7 +25,7 @@ namespace ventasZapatiilasAPI.Controllers
         {
             return new ProductoDTO
             {
-                Id = p.Id,
+                Id = p.IdProducto,
                 Marca = p.Marca,
                 Modelo = p.Modelo,
                 Descripcion = p.Descripcion,
@@ -129,7 +129,7 @@ namespace ventasZapatiilasAPI.Controllers
                 return StatusCode (201, new
                 {
                     mensaje = "Producto creado exitosamente",
-                    productoId = producto.Id,
+                    productoId = producto.IdProducto,
                     imagenUrl = producto.UrlImagen,
                     totalVariantes = producto.Variantes.Count
                 });
@@ -166,7 +166,7 @@ namespace ventasZapatiilasAPI.Controllers
             {
                 var producto = await _context.Productos
                     .Include(p => p.Variantes)
-                    .FirstOrDefaultAsync(p => p.Id == id);
+                    .FirstOrDefaultAsync(p => p.IdProducto == id);
 
                 if (producto == null)
                     return NotFound(new { mensaje = "Producto no encontrado" });

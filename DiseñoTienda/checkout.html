@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizar Compra - Kick Vaelt</title>
+    <link rel="stylesheet" href="css/disTienda.css">
+    <link rel="stylesheet" href="css/checkout.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="fondo-tienda">
+
+    <header class="main-header">
+        <h1>Ｋｉｃｋ Ｖａｅｌｔ</h1>
+    </header>
+
+    <!-- Badge del carrito -->
+    <div class="carrito-badge" id="carritoBadge" onclick="irAlCarrito()" title="Ver carrito">
+        <span id="cantidadCarrito">0</span>
+    </div>
+
+    <nav class="main-nav">
+        <ul>
+            <li><a href="Ventas.html?seccion=mujer">Mujer</a></li>
+            <li><a href="Ventas.html?seccion=hombre">Hombres</a></li>
+            <li><a href="Ventas.html?seccion=niños">Niños</a></li>
+            <li><a href="Ventas.html?seccion=destacados">Destacados</a></li>
+            <li><a href="Ventas.html?seccion=ofertas">Ofertas</a></li>
+        </ul>
+    </nav>
+
+    <main class="checkout-container">
+        <div class="checkout-header">
+            <h2>🛍️ Finalizar Compra</h2>
+            <div class="checkout-pasos">
+                <div class="paso activo">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Carrito</span>
+                </div>
+                <div class="paso activo">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Confirmar</span>
+                </div>
+                <div class="paso">
+                    <i class="fas fa-receipt"></i>
+                    <span>Pedido</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de carga -->
+        <div id="loading-section" class="loading-section" style="display: none;">
+            <div class="spinner"></div>
+            <p>Procesando tu pedido...</p>
+        </div>
+
+        <!-- Sección principal de checkout -->
+        <div id="checkout-content" class="checkout-content">
+            <!-- Información del usuario -->
+            <section class="info-usuario-section">
+                <h3><i class="fas fa-user"></i> Información del Cliente</h3>
+                <div class="info-usuario-card">
+                    <p><strong>Email:</strong> <span id="usuario-email">cargando...</span></p>
+                    <p><strong>ID Usuario:</strong> <span id="usuario-id">cargando...</span></p>
+                </div>
+            </section>
+
+            <!-- Resumen del pedido -->
+            <section class="resumen-pedido-section">
+                <h3><i class="fas fa-box"></i> Resumen del Pedido</h3>
+                <div id="productos-resumen-container" class="productos-resumen">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+
+                <!-- Total -->
+                <div class="total-checkout">
+                    <div class="total-row">
+                        <span>Subtotal:</span>
+                        <span id="subtotal-checkout">$0.00</span>
+                    </div>
+                    <div class="total-row total-principal">
+                        <span>Total a Pagar:</span>
+                        <span id="total-checkout">$0.00</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Método de pago (placeholder) -->
+            <section class="metodo-pago-section">
+                <h3><i class="fas fa-credit-card"></i> Método de Pago</h3>
+                <div class="metodo-pago-info">
+                    <p><i class="fas fa-info-circle"></i> Por el momento, todos los pedidos se procesan como <strong>Pago Pendiente</strong>.</p>
+                    <p>Recibirás un correo con los detalles para completar tu pago.</p>
+                </div>
+            </section>
+
+            <!-- Botones de acción -->
+            <div class="checkout-acciones">
+                <a href="Carrito.html" class="btn-secundario">
+                    <i class="fas fa-arrow-left"></i> Volver al Carrito
+                </a>
+                <button id="confirmar-pedido-btn" class="btn-principal">
+                    <i class="fas fa-check"></i> Confirmar Pedido
+                </button>
+            </div>
+        </div>
+
+        <!-- Sección de éxito (oculta por defecto) -->
+        <div id="exito-section" class="exito-section" style="display: none;">
+            <div class="exito-card">
+                <div class="exito-icono">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2>¡Pedido Realizado con Éxito! 🎉</h2>
+                <p class="exito-mensaje">Tu pedido ha sido procesado correctamente.</p>
+                
+                <div class="exito-info">
+                    <p><strong>Número de Pedido:</strong> <span id="numero-pedido">#000000</span></p>
+                    <p><strong>Total:</strong> <span id="total-pedido">$0.00</span></p>
+                    <p><strong>Estado:</strong> <span class="badge-pendiente">Pendiente</span></p>
+                </div>
+
+                <div class="exito-notificacion">
+                    <i class="fas fa-envelope"></i>
+                    <p>Hemos enviado un correo de confirmación con la factura adjunta.</p>
+                </div>
+
+                <div class="exito-acciones">
+                    <a href="misPedidos.html" class="btn-principal">
+                        <i class="fas fa-list"></i> Ver Mis Pedidos
+                    </a>
+                    <a href="Ventas.html" class="btn-secundario">
+                        <i class="fas fa-shopping-bag"></i> Seguir Comprando
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de error (oculta por defecto) -->
+        <div id="error-section" class="error-section" style="display: none;">
+            <div class="error-card">
+                <div class="error-icono">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <h2>Error al Procesar el Pedido</h2>
+                <p id="error-mensaje" class="error-mensaje">Hubo un problema al procesar tu pedido.</p>
+                
+                <div class="error-acciones">
+                    <button onclick="location.reload()" class="btn-principal">
+                        <i class="fas fa-redo"></i> Intentar de Nuevo
+                    </button>
+                    <a href="Carrito.html" class="btn-secundario">
+                        <i class="fas fa-arrow-left"></i> Volver al Carrito
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="js/utils.js"></script>
+    <script src="js/checkout.js"></script>
+</body>
+</html>

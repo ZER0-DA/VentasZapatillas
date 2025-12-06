@@ -10,7 +10,7 @@ namespace ventasZapatiilasAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize] // Requiere estar logueado
+    [Authorize] 
     public class CarritoController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -20,13 +20,17 @@ namespace ventasZapatiilasAPI.Controllers
             _context = context;
         }
 
-        // Agregar producto al carrito
+        
         [HttpPost("AgregarAlCarrito")]
         public async Task<IActionResult> AgregarAlCarrito([FromBody] CarritoDTO carritoDto)
         {
             try
             {
-                // Obtener el ID del usuario desde el token JWT
+                if (carritoDto.Cantidad <= 0)
+                {
+                    return BadRequest(new { mensaje = "La cantidad debe ser mayor a 0" });
+                }
+
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                 if (string.IsNullOrEmpty(userIdClaim))
@@ -53,6 +57,7 @@ namespace ventasZapatiilasAPI.Controllers
                 {
                     // Si ya existe, aumentar cantidad
                     existente.Cantidad += carritoDto.Cantidad;
+                    existente.FechaAgregado = DateTime.UtcNow; // Actualizar fecha
                     _context.Carrito.Update(existente);
                 }
                 else
@@ -63,7 +68,8 @@ namespace ventasZapatiilasAPI.Controllers
                         IdUsuario = idUsuario,
                         IdProducto = carritoDto.Idproducto,
                         Cantidad = carritoDto.Cantidad,
-                        FechaAgregado = DateTime.UtcNow
+                        FechaAgregado = DateTime.UtcNow,
+                        Producto = producto! // Establecer la navegación con el producto que ya consultamos
                     };
 
                     await _context.Carrito.AddAsync(nuevoItem);
@@ -71,7 +77,16 @@ namespace ventasZapatiilasAPI.Controllers
 
                 await _context.SaveChangesAsync();
 
-                return Ok(new { mensaje = "Producto agregado al carrito correctamente" });
+                // Obtener cantidad total de productos en el carrito
+                var cantidadTotal = await _context.Carrito
+                    .Where(c => c.IdUsuario == idUsuario)
+                    .SumAsync(c => c.Cantidad);
+
+                return Ok(new
+                {
+                    mensaje = "Producto agregado al carrito correctamente",
+                    cantidadEnCarrito = cantidadTotal
+                });
             }
             catch (Exception ex)
             {
@@ -79,13 +94,13 @@ namespace ventasZapatiilasAPI.Controllers
             }
         }
 
-        // Obtener productos del carrito del usuario logueado
+        
         [HttpGet("ObtenerCarrito")]
         public async Task<IActionResult> ObtenerCarrito()
         {
             try
             {
-                // Obtener ID del usuario desde el token
+                
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                 if (string.IsNullOrEmpty(userIdClaim))
@@ -95,36 +110,194 @@ namespace ventasZapatiilasAPI.Controllers
 
                 int idUsuario = int.Parse(userIdClaim);
 
-                // Obtener todos los productos en el carrito con sus detalles
+                
                 var carrito = await _context.Carrito
                     .Where(c => c.IdUsuario == idUsuario)
-                    .Include(c => c.Producto) // Traer información del producto
+                    .Include(c => c.Producto) 
                     .Select(c => new
                     {
                         idCarrito = c.IdCarrito,
                         idProducto = c.IdProducto,
-                        nombre = c.Producto.Modelo,
+                        marca = c.Producto.Marca,
+                        modelo = c.Producto.Modelo,
                         precio = c.Producto.Precio,
                         imagen = c.Producto.UrlImagen,
                         cantidad = c.Cantidad,
                         subtotal = c.Cantidad * c.Producto.Precio,
                         fechaAgregado = c.FechaAgregado
                     })
+                    .OrderByDescending(c => c.fechaAgregado) 
                     .ToListAsync();
 
-                // Calcular total
+               
                 var total = carrito.Sum(c => c.subtotal);
 
                 return Ok(new
                 {
                     productos = carrito,
                     totalProductos = carrito.Count,
+                    cantidadTotal = carrito.Sum(c => c.cantidad),
                     totalPagar = total
                 });
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new { mensaje = "Error al obtener carrito", error = ex.Message });
+            }
+        }
+
+
+        [HttpPut("ActualizarCantidad")]
+        public async Task<IActionResult> ActualizarCantidad([FromBody] ActualizarCantidadDTO dto)
+        {
+            try
+            {
+                if (dto.Cantidad <= 0)
+                {
+                    return BadRequest(new { mensaje = "La cantidad debe ser mayor a 0" });
+                }
+
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userIdClaim))
+                {
+                    return Unauthorized(new { mensaje = "Debes iniciar sesión" });
+                }
+
+                int idUsuario = int.Parse(userIdClaim);
+
+               
+                var item = await _context.Carrito
+                    .FirstOrDefaultAsync(c => c.IdCarrito == dto.IdCarrito && c.IdUsuario == idUsuario);
+
+                if (item == null)
+                {
+                    return NotFound(new { mensaje = "Producto no encontrado en el carrito" });
+                }
+
+                
+                item.Cantidad = dto.Cantidad;
+                item.FechaAgregado = DateTime.UtcNow;
+
+                _context.Carrito.Update(item);
+                await _context.SaveChangesAsync();
+
+                // Calcular nuevo subtotal
+                var producto = await _context.Productos
+                    .FirstOrDefaultAsync(p => p.IdProducto == item.IdProducto);
+
+                var subtotal = item.Cantidad * (producto?.Precio ?? 0);
+
+                return Ok(new
+                {
+                    mensaje = "Cantidad actualizada correctamente",
+                    nuevaCantidad = item.Cantidad,
+                    subtotal = subtotal
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { mensaje = "Error al actualizar cantidad", error = ex.Message });
+            }
+        }
+
+        // ============================================
+        // 4. ELIMINAR UN PRODUCTO DEL CARRITO
+        // ============================================
+        [HttpDelete("EliminarProducto/{idCarrito}")]
+        public async Task<IActionResult> EliminarProducto(int idCarrito)
+        {
+            try
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userIdClaim))
+                {
+                    return Unauthorized(new { mensaje = "Debes iniciar sesión" });
+                }
+
+                int idUsuario = int.Parse(userIdClaim);
+
+                // Buscar el item
+                var item = await _context.Carrito
+                    .FirstOrDefaultAsync(c => c.IdCarrito == idCarrito && c.IdUsuario == idUsuario);
+
+                if (item == null)
+                {
+                    return NotFound(new { mensaje = "Producto no encontrado en el carrito" });
+                }
+
+                _context.Carrito.Remove(item);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { mensaje = "Producto eliminado del carrito correctamente" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { mensaje = "Error al eliminar producto", error = ex.Message });
+            }
+        }
+
+        // ============================================
+        // 5. VACIAR TODO EL CARRITO
+        // ============================================
+        [HttpDelete("VaciarCarrito")]
+        public async Task<IActionResult> VaciarCarrito()
+        {
+            try
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userIdClaim))
+                {
+                    return Unauthorized(new { mensaje = "Debes iniciar sesión" });
+                }
+
+                int idUsuario = int.Parse(userIdClaim);
+
+                // Obtener todos los items del carrito del usuario
+                var items = await _context.Carrito
+                    .Where(c => c.IdUsuario == idUsuario)
+                    .ToListAsync();
+
+                if (items.Count == 0)
+                {
+                    return Ok(new { mensaje = "El carrito ya está vacío" });
+                }
+
+                _context.Carrito.RemoveRange(items);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { mensaje = "Carrito vaciado correctamente", productosEliminados = items.Count });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { mensaje = "Error al vaciar carrito", error = ex.Message });
+            }
+        }
+
+        // ============================================
+        // 6. OBTENER CANTIDAD TOTAL EN CARRITO (para badge)
+        // ============================================
+        [HttpGet("CantidadTotal")]
+        public async Task<IActionResult> ObtenerCantidadTotal()
+        {
+            try
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userIdClaim))
+                {
+                    return Unauthorized(new { mensaje = "Debes iniciar sesión" });
+                }
+
+                int idUsuario = int.Parse(userIdClaim);
+
+                var cantidadTotal = await _context.Carrito
+                    .Where(c => c.IdUsuario == idUsuario)
+                    .SumAsync(c => c.Cantidad);
+
+                return Ok(new { cantidadTotal });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { mensaje = "Error al obtener cantidad", error = ex.Message });
             }
         }
     }

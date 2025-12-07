@@ -27,3 +27,5 @@ appsettings.Development.json
 # System / OS
 desktop.ini
 Thumbs.db
+
+appsettings.json

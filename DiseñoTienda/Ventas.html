@@ -13,7 +13,7 @@
     <h1>Ｋｉｃｋ Ｖａｅｌｔ</h1>
 </header>
 
-<!-- Badge del carrito -->
+
 <div class="carrito-badge" id="carritoBadge" onclick="irAlCarrito()" title="Ver carrito">
     <span id="cantidadCarrito">0</span>
 </div>
@@ -25,6 +25,7 @@
         <li><a href="#" data-seccion="niños" onclick="mostrarSeccion('niños', event)">Niños</a></li>
         <li><a href="#" data-seccion="destacados" onclick="mostrarSeccion('destacados', event)" class="active">Destacados</a></li>
         <li><a href="#" data-seccion="ofertas" onclick="mostrarSeccion('ofertas', event)">Ofertas</a></li>
+        <li><a href="misPedidos.html">Pedidos</a></li>
     </ul>
 
     <input type="text" id="buscador" placeholder="Buscar...">
@@ -35,7 +36,6 @@
     <p class="mensaje-carga">Cargando productos...</p>
 </div>
 
-<!-- Cargar scripts en orden correcto -->
 <script src="js/utils.js"></script>
 <script src="js/tienda.js"></script>
 

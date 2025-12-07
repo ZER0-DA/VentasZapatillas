@@ -1,6 +1,8 @@
 const API_CARRITO_URL = `${API_BASE_URL}/api/Carrito`;
 
-
+// ============================================
+// CARGAR CARRITO
+// ============================================
 async function cargarCarrito() {
     if (!verificarSesion()) return;
 
@@ -11,7 +13,6 @@ async function cargarCarrito() {
     
     if (!itemsBody) return;
     
-    // Mostrar mensaje de carga mientras se espera la respuesta
     itemsBody.innerHTML = '<tr><td colspan="5">Cargando carrito...</td></tr>';
     
     try {
@@ -37,7 +38,6 @@ async function cargarCarrito() {
 
         const datosCarrito = await respuesta.json();
         
-        // Manejar el estado del carrito (vacío o con contenido)
         if (datosCarrito.productos.length === 0) {
             if (contenido) contenido.style.display = 'none';
             if (vacioMensaje) vacioMensaje.style.display = 'flex';
@@ -57,10 +57,9 @@ async function cargarCarrito() {
     }
 }
 
-/**
- * Dibuja la tabla de productos y actualiza el resumen.
- * @param {object} datos - Objeto con los datos del carrito.
- */
+// ============================================
+// RENDERIZAR CARRITO
+// ============================================
 function renderizarCarrito(datos) {
     const itemsBody = document.getElementById('items-carrito-body');
     if (!itemsBody) return;
@@ -70,7 +69,6 @@ function renderizarCarrito(datos) {
     datos.productos.forEach(item => {
         const fila = document.createElement('tr');
         
-        // Construye la URL de la imagen
         const imageUrl = item.imagen 
             ? (item.imagen.startsWith("/") ? `${API_BASE_URL}${item.imagen}` : item.imagen)
             : "img/default.jpg";
@@ -102,7 +100,6 @@ function renderizarCarrito(datos) {
         itemsBody.appendChild(fila);
     });
 
-    // Actualizar resumen
     const totalProductosBadge = document.getElementById('total-productos-badge');
     const cantidadTotal = document.getElementById('cantidadTotal');
     const totalAPagar = document.getElementById('total-a-pagar');
@@ -111,25 +108,17 @@ function renderizarCarrito(datos) {
     if (cantidadTotal) cantidadTotal.textContent = datos.cantidadTotal;
     if (totalAPagar) totalAPagar.textContent = `$${datos.totalPagar.toFixed(2)}`;
     
-    // Habilitar/Deshabilitar botón de pago
     const procederBtn = document.getElementById('proceder-pago-btn');
     if (procederBtn) {
         procederBtn.disabled = datos.totalPagar === 0;
     }
     
-    // Actualizar badge global del carrito
     actualizarBadgeCarrito();
 }
 
 // ============================================
-// ACTUALIZAR CANTIDAD (PUT)
+// ACTUALIZAR CANTIDAD
 // ============================================
-
-/**
- * Envía una solicitud PUT a la API para actualizar la cantidad de un producto.
- * @param {number} idCarrito - ID del item del carrito a modificar.
- * @param {string | number} nuevaCantidad - La nueva cantidad deseada.
- */
 async function actualizarCantidad(idCarrito, nuevaCantidad) {
     if (!verificarSesion()) return;
     
@@ -168,7 +157,7 @@ async function actualizarCantidad(idCarrito, nuevaCantidad) {
         }
 
         mostrarNotificacion('Cantidad actualizada.', true);
-        cargarCarrito(); // Recargar todo el carrito para recalcular totales
+        cargarCarrito();
 
     } catch (error) {
         console.error('Error al actualizar cantidad:', error);
@@ -178,13 +167,8 @@ async function actualizarCantidad(idCarrito, nuevaCantidad) {
 }
 
 // ============================================
-// ELIMINAR PRODUCTO (DELETE)
+// ELIMINAR PRODUCTO
 // ============================================
-
-/**
- * Envía una solicitud DELETE a la API para eliminar un producto del carrito.
- * @param {number} idCarrito - ID del item del carrito a eliminar.
- */
 async function eliminarProducto(idCarrito) {
     if (!verificarSesion() || !confirm('¿Estás seguro de que quieres eliminar este producto?')) {
         return;
@@ -213,7 +197,7 @@ async function eliminarProducto(idCarrito) {
         }
 
         mostrarNotificacion('Producto eliminado correctamente.', true);
-        cargarCarrito(); // Recargar el carrito
+        cargarCarrito();
         
     } catch (error) {
         console.error('Error al eliminar producto:', error);
@@ -222,12 +206,8 @@ async function eliminarProducto(idCarrito) {
 }
 
 // ============================================
-// VACIAR CARRITO (DELETE)
+// VACIAR CARRITO
 // ============================================
-
-/**
- * Envía una solicitud DELETE a la API para vaciar todo el carrito.
- */
 async function vaciarCarrito() {
     if (!verificarSesion() || !confirm('¿Estás seguro de que deseas vaciar todo el carrito? Esta acción es irreversible.')) {
         return;
@@ -256,7 +236,7 @@ async function vaciarCarrito() {
         }
 
         mostrarNotificacion('El carrito ha sido vaciado.', true);
-        cargarCarrito(); // Recargar, lo que mostrará el mensaje de carrito vacío
+        cargarCarrito();
         
     } catch (error) {
         console.error('Error al vaciar carrito:', error);
@@ -267,25 +247,17 @@ async function vaciarCarrito() {
 // ============================================
 // IR AL CHECKOUT
 // ============================================
-
-/**
- * Redirige a la página de checkout
- */
 function irAlCheckout() {
-    debugLog('NAV', '🛒 Navegando al checkout');
     window.location.href = 'checkout.html';
 }
 
 // ============================================
 // INICIALIZACIÓN
 // ============================================
-
-// Iniciar la carga del carrito al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
     cargarCarrito();
     actualizarBadgeCarrito();
     
-    // Conectar botón de finalizar compra
     const btnCheckout = document.getElementById('proceder-pago-btn');
     if (btnCheckout) {
         btnCheckout.addEventListener('click', irAlCheckout);

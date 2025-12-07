@@ -38,7 +38,7 @@ namespace ventasZapatiilasAPI.Controllers
                 FechaCreacion = p.FechaCreacion,
                 Variantes = p.Variantes.Select(v => new VarianteInfoDTO
                 {
-                    Id = v.Id,
+                    Id = v.IdVariante,
                     Talla = v.Talla,
                     Stock = v.Stock
                 }).ToList()

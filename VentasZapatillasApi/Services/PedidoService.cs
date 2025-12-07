@@ -39,15 +39,31 @@ namespace ventasZapatiilasAPI.Services
                 // Convertir items a JSON
                 var itemsJson = JsonSerializer.Serialize(pedidoDto.Items);
 
-                // Parámetros para el SP
-                var idUsuarioParam = new SqlParameter("@IdUsuario", pedidoDto.IdUsuario);
-                var itemsParam = new SqlParameter("@Items", itemsJson);
+                // Crear parámetros para el SP
+                var returnParam = new SqlParameter
+                {
+                    ParameterName = "@return",
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.ReturnValue
+                };
+
+                var idUsuarioParam = new SqlParameter("@IdUsuario", SqlDbType.Int)
+                {
+                    Value = pedidoDto.IdUsuario
+                };
+
+                var itemsParam = new SqlParameter("@Items", SqlDbType.NVarChar, -1)
+                {
+                    Value = itemsJson
+                };
+
                 var idPedidoParam = new SqlParameter
                 {
                     ParameterName = "@IdPedido",
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Output
                 };
+
                 var mensajeParam = new SqlParameter
                 {
                     ParameterName = "@Mensaje",
@@ -56,21 +72,36 @@ namespace ventasZapatiilasAPI.Services
                     Direction = ParameterDirection.Output
                 };
 
-                // Ejecutar Stored Procedure
-                await _context.Database.ExecuteSqlRawAsync(
-                    "EXEC @return = SP_ProcesarPedido @IdUsuario, @Items, @IdPedido OUTPUT, @Mensaje OUTPUT",
-                    new SqlParameter("@return", SqlDbType.Int) { Direction = ParameterDirection.ReturnValue },
-                    idUsuarioParam,
-                    itemsParam,
-                    idPedidoParam,
-                    mensajeParam
-                );
+                // Asegurar que la conexión esté abierta
+                var connection = _context.Database.GetDbConnection();
+                if (connection.State != ConnectionState.Open)
+                {
+                    await connection.OpenAsync();
+                }
+
+                // Crear comando
+                using var command = connection.CreateCommand();
+                command.CommandText = "SP_ProcesarPedido";
+                command.CommandType = CommandType.StoredProcedure;
+
+                // Agregar parámetros
+                command.Parameters.Add(returnParam);
+                command.Parameters.Add(idUsuarioParam);
+                command.Parameters.Add(itemsParam);
+                command.Parameters.Add(idPedidoParam);
+                command.Parameters.Add(mensajeParam);
+
+                // Ejecutar SOLO UNA VEZ
+                await command.ExecuteNonQueryAsync();
 
                 // Obtener resultados
-                var returnValue = (int)((SqlParameter)_context.Database.GetDbConnection()
-                    .CreateCommand().Parameters["@return"]).Value;
+                var returnValue = returnParam.Value != DBNull.Value ? (int)returnParam.Value : -99;
                 var mensaje = mensajeParam.Value?.ToString() ?? "Error desconocido";
                 var idPedido = idPedidoParam.Value != DBNull.Value ? (int)idPedidoParam.Value : 0;
+
+                _logger.LogInformation(
+                    "SP ejecutado - Return: {ReturnValue}, IdPedido: {IdPedido}, Mensaje: {Mensaje}",
+                    returnValue, idPedido, mensaje);
 
                 if (returnValue == 0 && idPedido > 0)
                 {
@@ -83,9 +114,14 @@ namespace ventasZapatiilasAPI.Services
                     return (false, mensaje, null);
                 }
             }
+            catch (SqlException sqlEx)
+            {
+                _logger.LogError(sqlEx, "Error SQL al crear pedido: {Message}", sqlEx.Message);
+                return (false, $"Error en la base de datos: {sqlEx.Message}", null);
+            }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear pedido");
+                _logger.LogError(ex, "Error al crear pedido: {Message}", ex.Message);
                 return (false, $"Error al procesar el pedido: {ex.Message}", null);
             }
         }
@@ -99,7 +135,10 @@ namespace ventasZapatiilasAPI.Services
                     .FirstOrDefaultAsync(p => p.IdPedido == idPedido);
 
                 if (pedido == null)
+                {
+                    _logger.LogWarning("Pedido {IdPedido} no encontrado", idPedido);
                     return null;
+                }
 
                 var detalles = await _context.DetallePedidos
                     .Include(d => d.Producto)
@@ -190,10 +229,16 @@ namespace ventasZapatiilasAPI.Services
             {
                 var pedido = await _context.Pedidos.FindAsync(idPedido);
                 if (pedido == null)
+                {
+                    _logger.LogWarning("Pedido {IdPedido} no encontrado para actualizar estado", idPedido);
                     return false;
+                }
 
                 pedido.EstadoPedido = nuevoEstado;
                 await _context.SaveChangesAsync();
+
+                _logger.LogInformation("Estado del pedido {IdPedido} actualizado a {NuevoEstado}",
+                    idPedido, nuevoEstado);
                 return true;
             }
             catch (Exception ex)
@@ -205,11 +250,16 @@ namespace ventasZapatiilasAPI.Services
 
         public async Task<bool> CancelarPedidoAsync(int idPedido)
         {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
             try
             {
                 var pedido = await _context.Pedidos.FindAsync(idPedido);
                 if (pedido == null)
+                {
+                    _logger.LogWarning("Pedido {IdPedido} no encontrado para cancelar", idPedido);
                     return false;
+                }
 
                 // Solo se puede cancelar si está en ciertos estados
                 if (pedido.EstadoPedido == "Enviado" || pedido.EstadoPedido == "Entregado")
@@ -230,15 +280,22 @@ namespace ventasZapatiilasAPI.Services
                     if (variante != null)
                     {
                         variante.Stock += detalle.Cantidad;
+                        _logger.LogInformation(
+                            "Stock restaurado: Variante {IdVariante} +{Cantidad}",
+                            detalle.IdVariante, detalle.Cantidad);
                     }
                 }
 
                 pedido.EstadoPedido = "Cancelado";
                 await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                _logger.LogInformation("Pedido {IdPedido} cancelado exitosamente", idPedido);
                 return true;
             }
             catch (Exception ex)
             {
+                await transaction.RollbackAsync();
                 _logger.LogError(ex, "Error al cancelar pedido {IdPedido}", idPedido);
                 return false;
             }

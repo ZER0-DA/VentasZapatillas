@@ -51,7 +51,7 @@ namespace ventasZapatiilasAPI.Controllers
 
                 // Buscar si ya existe en el carrito
                 var existente = await _context.Carrito
-                    .FirstOrDefaultAsync(c => c.IdUsuario == idUsuario && c.IdProducto == carritoDto.Idproducto);
+                    .FirstOrDefaultAsync(c => c.IdUsuario == idUsuario && c.IdProducto == carritoDto.Idproducto && c.IdVariante  == carritoDto.Idvariante);
 
                 if (existente != null)
                 {
@@ -67,6 +67,7 @@ namespace ventasZapatiilasAPI.Controllers
                     {
                         IdUsuario = idUsuario,
                         IdProducto = carritoDto.Idproducto,
+                        IdVariante = carritoDto.Idvariante,
                         Cantidad = carritoDto.Cantidad,
                         FechaAgregado = DateTime.UtcNow,
                         Producto = producto! // Establecer la navegación con el producto que ya consultamos
@@ -124,7 +125,9 @@ namespace ventasZapatiilasAPI.Controllers
                         imagen = c.Producto.UrlImagen,
                         cantidad = c.Cantidad,
                         subtotal = c.Cantidad * c.Producto.Precio,
-                        fechaAgregado = c.FechaAgregado
+                        fechaAgregado = c.FechaAgregado,
+                        talla = c.Variante.Talla,
+                        idVariante = c.IdVariante
                     })
                     .OrderByDescending(c => c.fechaAgregado) 
                     .ToListAsync();
@@ -200,9 +203,8 @@ namespace ventasZapatiilasAPI.Controllers
             }
         }
 
-        // ============================================
-        // 4. ELIMINAR UN PRODUCTO DEL CARRITO
-        // ============================================
+      
+      
         [HttpDelete("EliminarProducto/{idCarrito}")]
         public async Task<IActionResult> EliminarProducto(int idCarrito)
         {
@@ -236,9 +238,7 @@ namespace ventasZapatiilasAPI.Controllers
             }
         }
 
-        // ============================================
-        // 5. VACIAR TODO EL CARRITO
-        // ============================================
+        
         [HttpDelete("VaciarCarrito")]
         public async Task<IActionResult> VaciarCarrito()
         {
@@ -273,9 +273,6 @@ namespace ventasZapatiilasAPI.Controllers
             }
         }
 
-        // ============================================
-        // 6. OBTENER CANTIDAD TOTAL EN CARRITO (para badge)
-        // ============================================
         [HttpGet("CantidadTotal")]
         public async Task<IActionResult> ObtenerCantidadTotal()
         {

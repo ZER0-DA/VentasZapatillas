@@ -7,20 +7,13 @@ let usuarioId = null;
 // ============================================
 // INICIALIZACIÓN
 // ============================================
-
 document.addEventListener('DOMContentLoaded', () => {
-    debugLog('CHECKOUT', '🚀 Iniciando checkout...');
-    
-    if (!verificarSesion()) {
-        debugLog('ERROR', '❌ Sin sesión - redirigiendo');
-        return;
-    }
+    if (!verificarSesion()) return;
 
     cargarDatosUsuario();
     cargarResumenCarrito();
     actualizarBadgeCarrito();
 
-    // Conectar botón de confirmar pedido
     const btnConfirmar = document.getElementById('confirmar-pedido-btn');
     if (btnConfirmar) {
         btnConfirmar.addEventListener('click', confirmarPedido);
@@ -30,14 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
 // ============================================
 // CARGAR DATOS DEL USUARIO
 // ============================================
-
 function cargarDatosUsuario() {
-    debugLog('CHECKOUT', '📋 Cargando datos del usuario...');
-    
     const email = localStorage.getItem('usuarioCorreo');
     usuarioId = parseInt(localStorage.getItem('usuarioId'));
-
-    debugLog('CHECKOUT', `Usuario: ${email}, ID: ${usuarioId}`);
 
     const emailEl = document.getElementById('usuario-email');
     const idEl = document.getElementById('usuario-id');
@@ -46,7 +34,6 @@ function cargarDatosUsuario() {
     if (idEl) idEl.textContent = usuarioId || 'No disponible';
 
     if (!usuarioId) {
-        debugLog('ERROR', '❌ No se pudo obtener el ID de usuario');
         mostrarError('No se pudo obtener la información del usuario');
     }
 }
@@ -54,10 +41,7 @@ function cargarDatosUsuario() {
 // ============================================
 // CARGAR RESUMEN DEL CARRITO
 // ============================================
-
 async function cargarResumenCarrito() {
-    debugLog('CHECKOUT', '🛒 Obteniendo carrito...');
-    
     const token = obtenerToken();
     const container = document.getElementById('productos-resumen-container');
     
@@ -75,7 +59,6 @@ async function cargarResumenCarrito() {
         });
 
         if (respuesta.status === 401) {
-            debugLog('ERROR', '❌ Token expirado');
             mostrarNotificacion('Sesión expirada', false);
             setTimeout(() => window.location.href = 'Login.html', 1500);
             return;
@@ -86,11 +69,8 @@ async function cargarResumenCarrito() {
         }
 
         const datos = await respuesta.json();
-        debugLog('CHECKOUT', '✅ Carrito obtenido', datos);
 
-        // Validar que hay productos
         if (!datos.productos || datos.productos.length === 0) {
-            debugLog('CHECKOUT', '⚠️ Carrito vacío');
             mostrarError('Tu carrito está vacío');
             setTimeout(() => window.location.href = 'Carrito.html', 2000);
             return;
@@ -100,7 +80,7 @@ async function cargarResumenCarrito() {
         renderizarResumen(datos);
 
     } catch (error) {
-        debugLog('ERROR', '❌ Error al cargar carrito', error);
+        console.error('Error al cargar carrito:', error);
         mostrarError('Error al cargar el carrito');
         container.innerHTML = '<p class="error-text">No se pudo cargar el carrito</p>';
     }
@@ -109,10 +89,7 @@ async function cargarResumenCarrito() {
 // ============================================
 // RENDERIZAR RESUMEN
 // ============================================
-
 function renderizarResumen(datos) {
-    debugLog('CHECKOUT', '🎨 Renderizando resumen...');
-    
     const container = document.getElementById('productos-resumen-container');
     if (!container) return;
 
@@ -140,41 +117,31 @@ function renderizarResumen(datos) {
         container.appendChild(productoCard);
     });
 
-    // Actualizar totales
     const subtotalEl = document.getElementById('subtotal-checkout');
     const totalEl = document.getElementById('total-checkout');
 
     if (subtotalEl) subtotalEl.textContent = `$${datos.totalPagar.toFixed(2)}`;
     if (totalEl) totalEl.textContent = `$${datos.totalPagar.toFixed(2)}`;
-
-    debugLog('CHECKOUT', `✅ Total: $${datos.totalPagar.toFixed(2)}`);
 }
 
 // ============================================
 // CONFIRMAR PEDIDO
 // ============================================
-
 async function confirmarPedido() {
-    debugLog('CHECKOUT', '🚀 Confirmando pedido...');
-
     if (!carritoActual || !carritoActual.productos || carritoActual.productos.length === 0) {
-        debugLog('ERROR', '❌ No hay productos en el carrito');
         mostrarNotificacion('El carrito está vacío', false);
         return;
     }
 
     if (!usuarioId) {
-        debugLog('ERROR', '❌ No hay ID de usuario');
         mostrarNotificacion('Error: No se pudo identificar al usuario', false);
         return;
     }
 
-    // Mostrar loading
     mostrarSeccion('loading');
     
     const token = obtenerToken();
 
-    // Preparar datos del pedido
     const items = carritoActual.productos.map(prod => ({
         idProducto: prod.idProducto,
         idVariante: prod.idVariante,
@@ -186,8 +153,6 @@ async function confirmarPedido() {
         items: items
     };
 
-    debugLog('CHECKOUT', '📦 Datos del pedido', pedidoData);
-
     try {
         const respuesta = await fetch(API_PEDIDO_URL, {
             method: 'POST',
@@ -198,36 +163,26 @@ async function confirmarPedido() {
             body: JSON.stringify(pedidoData)
         });
 
-        debugLog('API', `Respuesta: ${respuesta.status} ${respuesta.statusText}`);
-
         const resultado = await respuesta.json();
-        debugLog('API', 'Datos de respuesta', resultado);
 
         if (respuesta.ok) {
-            debugLog('CHECKOUT', '✅ Pedido creado exitosamente', resultado);
-            
-            // Extraer el pedido de la respuesta
             const pedido = resultado.pedido;
             
             if (pedido) {
                 mostrarExito(pedido);
                 
-                // Actualizar badge del carrito (ahora debería estar vacío)
-                setTimeout(() => {
-                    actualizarBadgeCarrito();
-                }, 1000);
+                setTimeout(() => actualizarBadgeCarrito(), 1000);
             } else {
                 throw new Error('No se recibió información del pedido');
             }
 
         } else {
-            debugLog('ERROR', '❌ Error al crear pedido', resultado);
             const mensaje = resultado.mensaje || 'Error al procesar el pedido';
             mostrarError(mensaje);
         }
 
     } catch (error) {
-        debugLog('ERROR', '❌ Excepción al confirmar pedido', error);
+        console.error('Error al confirmar pedido:', error);
         mostrarError(`Error: ${error.message || 'No se pudo conectar con el servidor'}`);
     }
 }
@@ -235,20 +190,17 @@ async function confirmarPedido() {
 // ============================================
 // MOSTRAR SECCIONES
 // ============================================
-
 function mostrarSeccion(seccion) {
     const loading = document.getElementById('loading-section');
     const content = document.getElementById('checkout-content');
     const exito = document.getElementById('exito-section');
     const error = document.getElementById('error-section');
 
-    // Ocultar todas
     if (loading) loading.style.display = 'none';
     if (content) content.style.display = 'none';
     if (exito) exito.style.display = 'none';
     if (error) error.style.display = 'none';
 
-    // Mostrar la solicitada
     switch(seccion) {
         case 'loading':
             if (loading) loading.style.display = 'flex';
@@ -266,8 +218,6 @@ function mostrarSeccion(seccion) {
 }
 
 function mostrarExito(pedido) {
-    debugLog('CHECKOUT', '🎉 Mostrando éxito', pedido);
-    
     const numeroPedidoEl = document.getElementById('numero-pedido');
     const totalPedidoEl = document.getElementById('total-pedido');
 
@@ -283,8 +233,6 @@ function mostrarExito(pedido) {
 }
 
 function mostrarError(mensaje) {
-    debugLog('CHECKOUT', '❌ Mostrando error', mensaje);
-    
     const errorMensajeEl = document.getElementById('error-mensaje');
     if (errorMensajeEl) {
         errorMensajeEl.textContent = mensaje;

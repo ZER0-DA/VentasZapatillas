@@ -8,7 +8,7 @@ namespace ventasZapatiilasAPI.Models
     {
         [Key]
         [Column("id_variante")]
-        public int Id { get; set; }
+        public int IdVariante { get; set; }
 
 
         [Column("id_producto")]

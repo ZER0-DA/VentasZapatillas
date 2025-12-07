@@ -3,14 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalle del Producto</title>
+    <title>Detalle del Producto - Kick Vaelt</title>
     <link rel="stylesheet" href="css/DetalleProd.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 
     <header class="main-header">
         <h1>Ｋｉｃｋ Ｖａｅｌｔ</h1>
     </header>
+
+    <!-- Badge del carrito -->
+    <div class="carrito-badge" id="carritoBadge" onclick="irAlCarrito()" title="Ver carrito">
+        <span id="cantidadCarrito">0</span>
+    </div>
     
     <nav class="main-nav">
         <ul>
@@ -28,49 +34,46 @@
         <div class="tarjeta-detalle">
             <!-- IMAGEN DEL PRODUCTO -->
             <div class="imagen-producto">
-            <img id="producto-imagen" src="" alt="Producto">
-
+                <img id="producto-imagen" src="" alt="Producto">
             </div>
 
             <!-- INFORMACIÓN DEL PRODUCTO -->
             <div class="info-derecha">
-                <h2 id="producto-nombre"></h2>
+                <h2 id="producto-nombre">Cargando...</h2>
 
                 <p id="producto-categoria" class="categoria"></p>
-
                 
                 <span class="etiqueta-stock">✓ Disponible en Stock</span>
                 
-                <p id="producto-precio" class="precio"></p>
-
+                <p id="producto-precio" class="precio">$0.00</p>
                 
-                <p id="producto-descripcion" class="descripcion"></p>
-
+                <p id="producto-descripcion" class="descripcion">Cargando descripción...</p>
 
                 <!-- SELECTOR DE TALLAS -->
                 <div class="tallas">
                     <h3>Selecciona tu talla (US):</h3>
-                    <div id="tallas-container" class="tallas-grid"></div>
+                    <div id="tallas-container" class="tallas-grid">
+                        <p class="sin-tallas">Cargando tallas...</p>
+                    </div>
                 </div>
-
 
                 <!-- BOTONES DE ACCIÓN -->
                 <div class="botones-container">
                     <a href="Ventas.html" class="boton-volver">
-                    ← Volver
+                        <i class="fas fa-arrow-left"></i> Volver
                     </a>
                     
                     <button class="btn-comprar">
-                        🛒 Agregar al Carrito
+                        <i class="fas fa-shopping-cart"></i> Agregar al Carrito
                     </button>
                 </div>
             </div>
         </div>
     </main>
 
-<script src="js/DetalleProducto.js"></script>
-<script src="js/utils.js"></script>
-<script src="js/carrito.js"></script>
+    <!-- Cargar scripts en orden correcto -->
+    <script src="js/utils.js"></script>
+    <script src="js/DetalleProducto.js"></script>
 
 </body>
 </html>

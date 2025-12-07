@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Pedidos - Kick Vaelt</title>
+    <link rel="stylesheet" href="css/disTienda.css">
+    <link rel="stylesheet" href="css/misPedidos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="fondo-tienda">
+
+    <header class="main-header">
+        <h1>Ｋｉｃｋ Ｖａｅｌｔ</h1>
+    </header>
+
+    <!-- Badge del carrito -->
+    <div class="carrito-badge" id="carritoBadge" onclick="irAlCarrito()" title="Ver carrito">
+        <span id="cantidadCarrito">0</span>
+    </div>
+
+    <nav class="main-nav">
+        <ul>
+            <li><a href="Ventas.html?seccion=mujer">Mujer</a></li>
+            <li><a href="Ventas.html?seccion=hombre">Hombres</a></li>
+            <li><a href="Ventas.html?seccion=niños">Niños</a></li>
+            <li><a href="Ventas.html?seccion=destacados">Destacados</a></li>
+            <li><a href="Ventas.html?seccion=ofertas">Ofertas</a></li>
+        </ul>
+    </nav>
+
+    <main class="pedidos-container">
+        <!-- Header -->
+        <div class="pedidos-header">
+            <h2><i class="fas fa-box"></i> Mis Pedidos</h2>
+            <a href="Ventas.html" class="btn-volver">
+                <i class="fas fa-arrow-left"></i> Volver a la Tienda
+            </a>
+        </div>
+
+        <!-- Filtros -->
+        <div class="pedidos-filtros">
+            <div class="filtro-group">
+                <label for="filtro-estado">
+                    <i class="fas fa-filter"></i> Filtrar por Estado:
+                </label>
+                <select id="filtro-estado" onchange="filtrarPedidos()">
+                    <option value="todos">Todos los Estados</option>
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="Procesando">Procesando</option>
+                    <option value="Enviado">Enviado</option>
+                    <option value="Entregado">Entregado</option>
+                    <option value="Cancelado">Cancelado</option>
+                </select>
+            </div>
+
+            <div class="filtro-group">
+                <label for="ordenar-por">
+                    <i class="fas fa-sort"></i> Ordenar por:
+                </label>
+                <select id="ordenar-por" onchange="ordenarPedidos()">
+                    <option value="reciente">Más Recientes</option>
+                    <option value="antiguo">Más Antiguos</option>
+                    <option value="mayor-precio">Mayor Precio</option>
+                    <option value="menor-precio">Menor Precio</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div id="loading-pedidos" class="loading-section">
+            <div class="spinner"></div>
+            <p>Cargando tus pedidos...</p>
+        </div>
+
+        <!-- Lista de Pedidos -->
+        <div id="pedidos-lista" class="pedidos-lista" style="display: none;">
+            <!-- Se llenará dinámicamente -->
+        </div>
+
+        <!-- Sin Pedidos -->
+        <div id="sin-pedidos" class="sin-pedidos" style="display: none;">
+            <div class="sin-pedidos-card">
+                <i class="fas fa-box-open"></i>
+                <h3>No tienes pedidos aún</h3>
+                <p>¡Empieza a comprar tus zapatillas favoritas!</p>
+                <a href="Ventas.html" class="btn-principal">
+                    <i class="fas fa-shopping-bag"></i> Explorar Productos
+                </a>
+            </div>
+        </div>
+
+        <!-- Error -->
+        <div id="error-pedidos" class="error-pedidos" style="display: none;">
+            <div class="error-card">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Error al Cargar Pedidos</h3>
+                <p id="error-mensaje">No se pudieron cargar tus pedidos.</p>
+                <button onclick="location.reload()" class="btn-secundario">
+                    <i class="fas fa-redo"></i> Intentar de Nuevo
+                </button>
+            </div>
+        </div>
+
+        <!-- Modal de Cancelación -->
+        <div id="modal-cancelar" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-exclamation-circle"></i> Confirmar Cancelación</h3>
+                    <button class="modal-close" onclick="cerrarModalCancelar()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Estás seguro de que deseas cancelar este pedido?</p>
+                    <p class="modal-warning">
+                        <i class="fas fa-info-circle"></i> 
+                        El stock de los productos será restaurado.
+                    </p>
+                    <p><strong>Pedido:</strong> <span id="modal-pedido-id">#000000</span></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secundario" onclick="cerrarModalCancelar()">
+                        No, Mantener Pedido
+                    </button>
+                    <button class="btn-danger" onclick="confirmarCancelacion()">
+                        Sí, Cancelar Pedido
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="js/utils.js"></script>
+    <script src="js/misPedidos.js"></script>
+</body>
+</html>

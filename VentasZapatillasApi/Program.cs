@@ -8,12 +8,11 @@ using ventasZapatiilasAPI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configurar DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("CadenaConexion"))
 );
 
-// Configurar opciones de Email y App Settings
+
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 

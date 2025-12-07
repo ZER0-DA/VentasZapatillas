@@ -16,6 +16,9 @@ namespace ventasZapatiilasAPI.Models
         [Column("id_producto")]
         public int IdProducto { get; set; }
 
+        [Column("id_variante")]
+        public int IdVariante { get; set; }
+
         [Column("cantidad")]
         public int Cantidad { get; set; }
 
@@ -27,5 +30,8 @@ namespace ventasZapatiilasAPI.Models
 
         [ForeignKey("IdProducto")]
         public  required Producto Producto { get; set; }
+
+        [ForeignKey("IdVariante")]
+        public ProductoVariante Variante { get; set; }=  null!;
     }
 }

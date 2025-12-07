@@ -3,6 +3,7 @@
     public class CarritoDTO
     {
         public int Idproducto { get; set; }
+        public int Idvariante { get; set; }
         public int Cantidad { get; set; }
     }
 }

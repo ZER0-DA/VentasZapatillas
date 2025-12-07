@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Pedido - Kick Vaelt</title>
+    <link rel="stylesheet" href="css/disTienda.css">
+    <link rel="stylesheet" href="css/detallePedido.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="fondo-tienda">
+
+    <header class="main-header">
+        <h1>Ｋｉｃｋ Ｖａｅｌｔ</h1>
+    </header>
+
+    <!-- Badge del carrito -->
+    <div class="carrito-badge" id="carritoBadge" onclick="irAlCarrito()" title="Ver carrito">
+        <span id="cantidadCarrito">0</span>
+    </div>
+
+    <nav class="main-nav">
+        <ul>
+            <li><a href="Ventas.html?seccion=mujer">Mujer</a></li>
+            <li><a href="Ventas.html?seccion=hombre">Hombres</a></li>
+            <li><a href="Ventas.html?seccion=niños">Niños</a></li>
+            <li><a href="Ventas.html?seccion=destacados">Destacados</a></li>
+            <li><a href="Ventas.html?seccion=ofertas">Ofertas</a></li>
+        </ul>
+    </nav>
+
+    <main class="detalle-container">
+        
+        <!-- Loading -->
+        <div id="loading-detalle" class="loading-section">
+            <div class="spinner"></div>
+            <p>Cargando detalles del pedido...</p>
+        </div>
+
+        <!-- Contenido del Pedido -->
+        <div id="pedido-detalle-content" style="display: none;">
+            
+            <!-- Header del Pedido -->
+            <div class="detalle-header">
+                <div class="header-info">
+                    <h2 id="pedido-numero">Pedido #000000</h2>
+                    <p id="pedido-fecha" class="fecha-detalle">
+                        <i class="far fa-calendar-alt"></i> 
+                        <span>01 de enero, 2024</span>
+                    </p>
+                </div>
+                <div class="header-acciones">
+                    <a href="misPedidos.html" class="btn-volver">
+                        <i class="fas fa-arrow-left"></i> Volver a Mis Pedidos
+                    </a>
+                    <button onclick="descargarFactura()" class="btn-factura">
+                        <i class="fas fa-file-pdf"></i> Descargar Factura
+                    </button>
+                </div>
+            </div>
+
+            <!-- Estado del Pedido -->
+            <div class="estado-timeline">
+                <h3><i class="fas fa-shipping-fast"></i> Estado del Pedido</h3>
+                <div id="timeline-container" class="timeline">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+                <div id="estado-actual-badge" class="estado-badge-grande">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+            </div>
+
+            <!-- Grid de Información -->
+            <div class="info-grid">
+                
+                <!-- Información del Cliente -->
+                <div class="info-card">
+                    <h3><i class="fas fa-user"></i> Información del Cliente</h3>
+                    <div class="info-content">
+                        <p><strong>Nombre:</strong> <span id="cliente-nombre">-</span></p>
+                        <p><strong>Email:</strong> <span id="cliente-email">-</span></p>
+                        <p><strong>ID Cliente:</strong> <span id="cliente-id">-</span></p>
+                    </div>
+                </div>
+
+                <!-- Resumen del Pedido -->
+                <div class="info-card">
+                    <h3><i class="fas fa-file-invoice-dollar"></i> Resumen</h3>
+                    <div class="info-content">
+                        <p><strong>Cantidad Items:</strong> <span id="resumen-items">0</span></p>
+                        <p><strong>Subtotal:</strong> <span id="resumen-subtotal">$0.00</span></p>
+                        <p class="total-row"><strong>Total Pagado:</strong> <span id="resumen-total">$0.00</span></p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Productos del Pedido -->
+            <div class="productos-section">
+                <h3><i class="fas fa-box-open"></i> Productos del Pedido</h3>
+                <div id="productos-detalle-container" class="productos-grid">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+            </div>
+
+            <!-- Acciones Adicionales -->
+            <div class="acciones-adicionales">
+                <button onclick="reenviarFactura()" class="btn-reenviar">
+                    <i class="fas fa-envelope"></i> Reenviar Factura por Email
+                </button>
+                <button id="btn-cancelar-pedido" onclick="abrirModalCancelar()" class="btn-cancelar-pedido" style="display: none;">
+                    <i class="fas fa-times-circle"></i> Cancelar Pedido
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Error -->
+        <div id="error-detalle" class="error-section" style="display: none;">
+            <div class="error-card">
+                <i class="fas fa-exclamation-circle"></i>
+                <h3>Error al Cargar el Pedido</h3>
+                <p id="error-mensaje">No se pudo obtener la información del pedido.</p>
+                <div class="error-acciones">
+                    <button onclick="location.reload()" class="btn-secundario">
+                        <i class="fas fa-redo"></i> Reintentar
+                    </button>
+                    <a href="misPedidos.html" class="btn-secundario">
+                        <i class="fas fa-list"></i> Ver Mis Pedidos
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Cancelación -->
+        <div id="modal-cancelar" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Confirmar Cancelación</h3>
+                    <button class="modal-close" onclick="cerrarModalCancelar()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Estás seguro de que deseas cancelar este pedido?</p>
+                    <div class="modal-warning">
+                        <i class="fas fa-info-circle"></i>
+                        <p>El stock de los productos será restaurado automáticamente.</p>
+                    </div>
+                    <p><strong>Pedido:</strong> <span id="modal-pedido-numero">#000000</span></p>
+                    <p><strong>Total:</strong> <span id="modal-pedido-total">$0.00</span></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secundario" onclick="cerrarModalCancelar()">
+                        No, Mantener Pedido
+                    </button>
+                    <button class="btn-danger" onclick="confirmarCancelacion()">
+                        Sí, Cancelar Pedido
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="js/utils.js"></script>
+    <script src="js/detallePedido.js"></script>
+</body>
+</html>

@@ -1,9 +1,10 @@
 /* Estilos generales del contenedor */
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(to right,  #0a2963, #3c3b3b, #0d407a);
+    background: linear-gradient(to right,  #550e01, #5e1414, #8B0000);
     padding: 20px;
 }
+
 
 .container {
     max-width: 700px;

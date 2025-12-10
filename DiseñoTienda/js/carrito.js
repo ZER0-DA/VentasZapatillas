@@ -1,4 +1,4 @@
-const API_CARRITO_URL = `${API_BASE_URL}/api/Carrito`;
+// API_CARRITO_URL ya está declarada en utils.js
 
 // ============================================
 // CARGAR CARRITO
@@ -80,8 +80,8 @@ function renderizarCarrito(datos) {
                     <span>${item.marca} - ${item.modelo}</span>
                 </div>
             </td>
-            <td>$${item.precio.toFixed(2)}</td>
-            <td>
+            <td data-label="Precio">${item.precio.toFixed(2)}</td>
+            <td data-label="Cantidad">
                 <input 
                     type="number" 
                     min="1" 
@@ -90,8 +90,8 @@ function renderizarCarrito(datos) {
                     onchange="actualizarCantidad(${item.idCarrito}, this.value)"
                 >
             </td>
-            <td>$${item.subtotal.toFixed(2)}</td>
-            <td>
+            <td data-label="Subtotal">${item.subtotal.toFixed(2)}</td>
+            <td data-label="Eliminar">
                 <button class="btn-eliminar" onclick="eliminarProducto(${item.idCarrito})">
                     <i class="fas fa-trash"></i>
                 </button>

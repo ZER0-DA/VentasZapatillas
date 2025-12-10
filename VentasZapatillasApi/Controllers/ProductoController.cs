@@ -45,7 +45,7 @@ namespace ventasZapatiilasAPI.Controllers
             };
         }
 
-  
+
         [HttpPost("NuevoProducto")]
         public async Task<IActionResult> CrearProducto([FromForm] CrearProductoDTO dto, IFormFile imagen)
         {
@@ -83,7 +83,7 @@ namespace ventasZapatiilasAPI.Controllers
                 if (variantes == null || variantes.Count == 0)
                     return BadRequest(new { mensaje = "Debe agregar al menos una talla con stock" });
 
-            
+
 
                 var uploadsFolder = Path.Combine(_env.WebRootPath ?? "wwwroot", "imagenes");
 
@@ -119,14 +119,14 @@ namespace ventasZapatiilasAPI.Controllers
                     {
                         Talla = v.Talla,
                         Stock = v.Stock,
-                        
+
                     }).ToList()
                 };
 
                 _context.Productos.Add(producto);
                 await _context.SaveChangesAsync();
 
-                return StatusCode (201, new
+                return StatusCode(201, new
                 {
                     mensaje = "Producto creado exitosamente",
                     productoId = producto.IdProducto,
@@ -158,7 +158,7 @@ namespace ventasZapatiilasAPI.Controllers
             }
         }
 
-    
+
         [HttpGet("{id}")]
         public async Task<IActionResult> ObtenerProductoPorId(int id)
         {
@@ -179,7 +179,7 @@ namespace ventasZapatiilasAPI.Controllers
             }
         }
 
-    
+
         [HttpGet("seccion/{seccion}")]
         public async Task<IActionResult> ObtenerPorSeccion(string seccion)
         {
@@ -198,7 +198,7 @@ namespace ventasZapatiilasAPI.Controllers
             }
         }
 
-        
+
         [HttpGet("destacados")]
         public async Task<IActionResult> ObtenerDestacados()
         {
@@ -234,6 +234,26 @@ namespace ventasZapatiilasAPI.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { mensaje = $"Error: {ex.Message}" });
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> EliminarProducto(int id)
+        {
+            try
+            {
+                var producto = await _context.Productos
+                    .Include(p => p.Variantes)
+                    .FirstOrDefaultAsync(p => p.IdProducto == id);
+                if (producto == null)
+                    return NotFound(new { mensaje = "Producto no encontrado" });
+                _context.Productos.Remove(producto);
+                await _context.SaveChangesAsync();
+                return Ok(new { mensaje = "Producto eliminado exitosamente" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { mensaje = $"Error al eliminar el producto: {ex.Message}" });
             }
         }
     }

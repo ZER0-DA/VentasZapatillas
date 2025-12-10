@@ -1,6 +1,6 @@
 /* ============================================
-   MIS PEDIDOS - ESTILOS
-   ============================================ */
+    MIS PEDIDOS - ESTILOS BASE
+    ============================================ */
 
 .pedidos-container {
     max-width: 1200px;
@@ -8,7 +8,7 @@
     padding: 20px;
 }
 
-/* Header */
+/* Header de la sección de pedidos */
 .pedidos-header {
     display: flex;
     justify-content: space-between;
@@ -51,7 +51,9 @@
     transform: translateX(-5px);
 }
 
-/* Filtros */
+/* ============================================
+    FILTROS
+    ============================================ */
 .pedidos-filtros {
     display: flex;
     gap: 20px;
@@ -96,7 +98,9 @@
     border-color: #3498db;
 }
 
-/* Loading */
+/* ============================================
+    ESTADOS DE CARGA (LOADING)
+    ============================================ */
 .loading-section {
     display: flex;
     flex-direction: column;
@@ -128,7 +132,9 @@
     color: #7f8c8d;
 }
 
-/* Lista de Pedidos */
+/* ============================================
+    LISTA Y CARDS DE PEDIDO
+    ============================================ */
 .pedidos-lista {
     display: grid;
     grid-template-columns: 1fr;
@@ -186,30 +192,11 @@
     gap: 6px;
 }
 
-.estado-pendiente {
-    background: #ffc107;
-    color: #000;
-}
-
-.estado-procesando {
-    background: #17a2b8;
-    color: white;
-}
-
-.estado-enviado {
-    background: #007bff;
-    color: white;
-}
-
-.estado-entregado {
-    background: #28a745;
-    color: white;
-}
-
-.estado-cancelado {
-    background: #dc3545;
-    color: white;
-}
+.estado-pendiente { background: #ffc107; color: #000; }
+.estado-procesando { background: #17a2b8; color: white; }
+.estado-enviado { background: #007bff; color: white; }
+.estado-entregado { background: #28a745; color: white; }
+.estado-cancelado { background: #dc3545; color: white; }
 
 /* Body del Pedido */
 .pedido-body {
@@ -275,38 +262,18 @@
     text-decoration: none;
 }
 
-.btn-ver-detalle {
-    background: #3498db;
-    color: white;
-    flex: 1;
-}
+.btn-ver-detalle { background: #3498db; color: white; flex: 1; }
+.btn-ver-detalle:hover { background: #2980b9; transform: translateY(-2px); }
 
-.btn-ver-detalle:hover {
-    background: #2980b9;
-    transform: translateY(-2px);
-}
+.btn-factura { background: #e74c3c; color: white; }
+.btn-factura:hover { background: #c0392b; transform: translateY(-2px); }
 
-.btn-factura {
-    background: #e74c3c;
-    color: white;
-}
+.btn-cancelar { background: #95a5a6; color: white; }
+.btn-cancelar:hover { background: #7f8c8d; transform: translateY(-2px); }
 
-.btn-factura:hover {
-    background: #c0392b;
-    transform: translateY(-2px);
-}
-
-.btn-cancelar {
-    background: #95a5a6;
-    color: white;
-}
-
-.btn-cancelar:hover {
-    background: #7f8c8d;
-    transform: translateY(-2px);
-}
-
-/* Sin Pedidos */
+/* ============================================
+    ESTADOS DE VISTA (Vacío / Error)
+    ============================================ */
 .sin-pedidos {
     display: flex;
     justify-content: center;
@@ -413,7 +380,9 @@
     background: #7f8c8d;
 }
 
-/* Modal */
+/* ============================================
+    MODAL (Detalle / Cancelación)
+    ============================================ */
 .modal {
     display: none;
     position: fixed;
@@ -529,7 +498,9 @@
     background: #c0392b;
 }
 
-/* Responsive */
+/* ============================================
+    RESPONSIVE (MIS PEDIDOS)
+    ============================================ */
 @media (max-width: 768px) {
     .pedidos-header {
         flex-direction: column;

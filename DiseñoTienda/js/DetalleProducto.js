@@ -1,5 +1,5 @@
 const API_PRODUCTOS_URL = `${API_BASE_URL}/api/Productos`;
-const API_CARRITO_URL = `${API_BASE_URL}/api/Carrito`;
+// API_CARRITO_URL ya está declarada en utils.js
 
 let productoActual = null;
 let varianteSeleccionada = null;
@@ -65,9 +65,12 @@ function renderizarDetalleProducto(producto) {
 
     renderizarVariantes(producto.variantes || []);
 
+    // Asegurar que el botón tenga el evento
     const btnComprar = document.querySelector('.btn-comprar');
     if (btnComprar) {
         btnComprar.onclick = agregarAlCarritoDesdeDetalle;
+    } else {
+        console.error('No se encontró el botón .btn-comprar');
     }
 }
 
@@ -77,7 +80,10 @@ function renderizarDetalleProducto(producto) {
 function renderizarVariantes(variantes) {
     const contenedor = document.getElementById("tallas-container");
     
-    if (!contenedor) return;
+    if (!contenedor) {
+        console.error('No se encontró el contenedor de tallas');
+        return;
+    }
 
     contenedor.innerHTML = "";
 
@@ -93,6 +99,8 @@ function renderizarVariantes(variantes) {
         if (variante.stock <= 0) {
             box.classList.add("sin-stock");
             box.title = "Sin stock disponible";
+            box.style.opacity = "0.5";
+            box.style.cursor = "not-allowed";
         }
 
         box.textContent = variante.talla;
@@ -119,7 +127,7 @@ function seleccionarVariante(variante, elemento) {
 }
 
 // ============================================
-// AGREGAR AL CARRITO
+// AGREGAR AL CARRITO (SIN CONFIRM MOLESTO)
 // ============================================
 async function agregarAlCarritoDesdeDetalle() {
     if (!varianteSeleccionada) {
@@ -153,20 +161,18 @@ async function agregarAlCarritoDesdeDetalle() {
         const datos = await respuesta.json();
 
         if (respuesta.ok) {
+            // SIN CONFIRM - Solo notificación limpia
             mostrarNotificacion(
-                `✅ ${productoActual.modelo} - Talla ${varianteSeleccionada.talla} agregado al carrito`,
+                `✓ ${productoActual.modelo} - Talla ${varianteSeleccionada.talla} agregado al carrito`,
                 true
             );
 
             actualizarBadgeCarrito();
 
+            // Limpiar selección de talla
             document.querySelectorAll('.talla-box')
                 .forEach(b => b.classList.remove('seleccionada'));
             varianteSeleccionada = null;
-
-            if (confirm('Producto agregado al carrito. ¿Deseas ver tu carrito?')) {
-                window.location.href = 'carrito.html';
-            }
 
         } else if (respuesta.status === 401) {
             mostrarNotificacion('Sesión expirada. Inicia sesión nuevamente', false);
@@ -187,5 +193,5 @@ async function agregarAlCarritoDesdeDetalle() {
 // IR AL CARRITO
 // ============================================
 function irAlCarrito() {
-    window.location.href = 'carrito.html';
+    window.location.href = 'Carrito.html';
 }

@@ -5,30 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis Pedidos - Kick Vaelt</title>
     <link rel="stylesheet" href="css/disTienda.css">
+    <link rel="stylesheet" href="css/carritoDis.css">
+    <link rel="stylesheet" href="css/disNav.css">
     <link rel="stylesheet" href="css/misPedidos.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body class="fondo-tienda">
+<body>
 
+    <!-- HEADER IGUAL QUE VENTAS -->
     <header class="main-header">
         <h1>Ｋｉｃｋ Ｖａｅｌｔ</h1>
     </header>
 
-    <!-- Badge del carrito -->
-    <div class="carrito-badge" id="carritoBadge" onclick="irAlCarrito()" title="Ver carrito">
-        <span id="cantidadCarrito">0</span>
-    </div>
-
+    <!-- NAV IGUAL QUE VENTAS -->
     <nav class="main-nav">
-        <ul>
+        <!-- Botón menú hamburguesa -->
+        <button class="menu-toggle" id="menuToggle">
+            <ion-icon name="menu-outline"></ion-icon>
+        </button>
+
+        <!-- Menú de navegación -->
+        <ul id="navMenu">
             <li><a href="Ventas.html?seccion=mujer">Mujer</a></li>
             <li><a href="Ventas.html?seccion=hombre">Hombres</a></li>
             <li><a href="Ventas.html?seccion=niños">Niños</a></li>
             <li><a href="Ventas.html?seccion=destacados">Destacados</a></li>
             <li><a href="Ventas.html?seccion=ofertas">Ofertas</a></li>
+            <li><a href="misPedidos.html" class="active">Pedidos</a></li>
         </ul>
+
+        <!-- Buscador -->
+        <input type="text" id="buscador" placeholder="Buscar...">
+
+        <!-- Iconos de navegación -->
+        <div class="iconos-nav">
+            <i class="icono buscar-icono" onclick="document.getElementById('buscador').focus()">
+                <ion-icon name="search-outline"></ion-icon>
+            </i>
+            
+            <div class="carrito-box-nav" id="carritoBadge" onclick="irAlCarrito()">
+                <i class="icono">
+                    <ion-icon name="cart-outline"></ion-icon>
+                </i>
+                <span class="contador" id="cantidadCarrito">0</span>
+            </div>
+            
+            <i class="icono">
+                <ion-icon name="person-outline"></ion-icon>
+            </i>
+        </div>
     </nav>
 
+    <!-- CONTENIDO DE MIS PEDIDOS -->
     <main class="pedidos-container">
         <!-- Header -->
         <div class="pedidos-header">
@@ -132,7 +160,53 @@
 
     </main>
 
+    <!-- FOOTER IGUAL QUE VENTAS -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Sobre Nosotros</h3>
+                <p>Kick Vaelt es tu tienda de zapatillas de confianza.</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Enlaces Rápidos</h3>
+                <ul>
+                    <li><a href="#">Inicio</a></li>
+                    <li><a href="#">Contacto</a></li>
+                    <li><a href="#">Política de Privacidad</a></li>
+                    <li><a href="#">Términos de Servicio</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <p>Email: info@kickvaelt.com</p>
+                <p>Teléfono: +507 6729-4567</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Redes Sociales</h3>
+                <div class="social-icons">
+                    <a href="#"><ion-icon name="logo-facebook"></ion-icon></a>
+                    <a href="#"><ion-icon name="logo-instagram"></ion-icon></a>
+                    <a href="#"><ion-icon name="logo-twitter"></ion-icon></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Kick Vaelt. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts del proyecto -->
     <script src="js/utils.js"></script>
     <script src="js/misPedidos.js"></script>
+    <script src="js/menuHamburguesa.js"></script>
+
+    <!-- Ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
 </body>
 </html>

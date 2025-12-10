@@ -3,7 +3,7 @@
    ============================================ */
 
 .detalle-container {
-    max-width: 1200px;
+    max-width: 100%;
     margin: 40px auto;
     padding: 20px;
 }
@@ -52,7 +52,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    transition: all 0.3s ease;
+    transition: 0.3s ease;
     text-decoration: none;
 }
 
@@ -94,10 +94,6 @@
     gap: 10px;
 }
 
-.estado-timeline h3 i {
-    color: #3498db;
-}
-
 .timeline {
     display: flex;
     align-items: center;
@@ -111,7 +107,7 @@
     align-items: center;
     gap: 10px;
     color: #bdc3c7;
-    transition: all 0.3s ease;
+    transition: 0.3s ease;
 }
 
 .timeline-item.completado {
@@ -160,34 +156,11 @@
     font-weight: 700;
 }
 
-.estado-badge-grande i {
-    font-size: 24px;
-}
-
-.estado-badge-grande.estado-pendiente {
-    background: #ffc107;
-    color: #000;
-}
-
-.estado-badge-grande.estado-procesando {
-    background: #17a2b8;
-    color: white;
-}
-
-.estado-badge-grande.estado-enviado {
-    background: #007bff;
-    color: white;
-}
-
-.estado-badge-grande.estado-entregado {
-    background: #28a745;
-    color: white;
-}
-
-.estado-badge-grande.estado-cancelado {
-    background: #dc3545;
-    color: white;
-}
+.estado-badge-grande.estado-pendiente { background: #ffc107; color: #000; }
+.estado-badge-grande.estado-procesando { background: #17a2b8; color: white; }
+.estado-badge-grande.estado-enviado { background: #007bff; color: white; }
+.estado-badge-grande.estado-entregado { background: #28a745; color: white; }
+.estado-badge-grande.estado-cancelado { background: #dc3545; color: white; }
 
 /* Grid de Información */
 .info-grid {
@@ -215,10 +188,6 @@
     border-bottom: 2px solid #ecf0f1;
 }
 
-.info-card h3 i {
-    color: #3498db;
-}
-
 .info-content p {
     margin: 12px 0;
     color: #34495e;
@@ -242,26 +211,13 @@
     font-weight: 700;
 }
 
-/* Productos Section */
+/* Productos */
 .productos-section {
     background: white;
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     margin-bottom: 30px;
-}
-
-.productos-section h3 {
-    color: #2c3e50;
-    margin: 0 0 25px 0;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.productos-section h3 i {
-    color: #3498db;
 }
 
 .productos-grid {
@@ -278,35 +234,12 @@
     padding: 20px;
     background: #f8f9fa;
     border-radius: 10px;
-    transition: all 0.3s ease;
+    transition: 0.3s ease;
 }
 
 .producto-detalle-card:hover {
     background: #e9ecef;
     transform: translateX(5px);
-}
-
-.producto-detalle-info h4 {
-    margin: 0 0 8px 0;
-    color: #2c3e50;
-    font-size: 18px;
-}
-
-.producto-marca {
-    color: #7f8c8d;
-    margin: 5px 0;
-    font-size: 14px;
-}
-
-.producto-talla {
-    color: #95a5a6;
-    margin: 5px 0;
-    font-size: 14px;
-}
-
-.producto-detalle-cantidad {
-    display: flex;
-    justify-content: center;
 }
 
 .cantidad-badge {
@@ -325,17 +258,16 @@
 .precio-unitario {
     color: #7f8c8d;
     font-size: 14px;
-    margin: 0 0 8px 0;
+    margin-bottom: 8px;
 }
 
 .subtotal {
     color: #27ae60;
     font-size: 22px;
     font-weight: 700;
-    margin: 0;
 }
 
-/* Acciones Adicionales */
+/* Acciones adicionales */
 .acciones-adicionales {
     display: flex;
     gap: 15px;
@@ -352,10 +284,9 @@
     font-size: 16px;
     font-weight: 600;
     display: flex;
-    align-items: center;
     justify-content: center;
     gap: 10px;
-    transition: all 0.3s ease;
+    transition: 0.3s ease;
 }
 
 .btn-reenviar {
@@ -375,7 +306,6 @@
 
 .btn-cancelar-pedido:hover {
     background: #c0392b;
-    transform: translateY(-2px);
 }
 
 /* Loading */
@@ -400,8 +330,7 @@
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    to { transform: rotate(360deg); }
 }
 
 .loading-section p {
@@ -433,44 +362,6 @@
     margin-bottom: 20px;
 }
 
-.error-card h3 {
-    color: #2c3e50;
-    margin: 20px 0;
-    font-size: 24px;
-}
-
-.error-card p {
-    color: #c0392b;
-    margin: 15px 0 30px 0;
-    font-size: 16px;
-}
-
-.error-acciones {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-}
-
-.btn-secundario {
-    background: #95a5a6;
-    color: white;
-    padding: 12px 24px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.3s ease;
-    text-decoration: none;
-}
-
-.btn-secundario:hover {
-    background: #7f8c8d;
-}
-
 /* Modal */
 .modal {
     display: none;
@@ -480,7 +371,7 @@
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.7);
+    background: rgba(0,0,0,0.7);
     justify-content: center;
     align-items: center;
 }
@@ -495,79 +386,8 @@
 }
 
 @keyframes modalSlideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-50px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 25px;
-    border-bottom: 2px solid #f0f0f0;
-}
-
-.modal-header h3 {
-    margin: 0;
-    color: #2c3e50;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.modal-header i {
-    color: #e74c3c;
-}
-
-.modal-close {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: #7f8c8d;
-    transition: color 0.3s ease;
-}
-
-.modal-close:hover {
-    color: #e74c3c;
-}
-
-.modal-body {
-    padding: 25px;
-}
-
-.modal-body p {
-    margin: 15px 0;
-    color: #34495e;
-    font-size: 16px;
-}
-
-.modal-warning {
-    background: #fff3cd;
-    padding: 15px;
-    border-radius: 8px;
-    border-left: 4px solid #ffc107;
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    margin: 20px 0;
-}
-
-.modal-warning i {
-    color: #856404;
-    margin-top: 3px;
-}
-
-.modal-warning p {
-    margin: 0;
-    color: #856404;
+    from { opacity: 0; transform: translateY(-50px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 .modal-footer {
@@ -583,11 +403,7 @@
     color: white;
     padding: 12px 24px;
     border-radius: 8px;
-    border: none;
     cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    transition: all 0.3s ease;
 }
 
 .btn-danger:hover {
@@ -616,7 +432,6 @@
     .btn-volver,
     .btn-factura {
         width: 100%;
-        justify-content: center;
     }
 
     .timeline {

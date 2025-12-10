@@ -1,4 +1,4 @@
-const API_CARRITO_URL = `${API_BASE_URL}/api/Carrito`;
+
 const API_PEDIDO_URL = `${API_BASE_URL}/api/Pedido`;
 
 let carritoActual = null;

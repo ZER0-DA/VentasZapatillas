@@ -139,8 +139,8 @@ function crearPedidoCard(pedido) {
                 </button>
                 ${pedido.estadoPedido === 'Pendiente' || pedido.estadoPedido === 'Procesando' 
                     ? `<button onclick="abrirModalCancelar(${pedido.idPedido})" class="btn-cancelar">
-                         <i class="fas fa-times-circle"></i> Cancelar
-                       </button>` 
+                        <i class="fas fa-times-circle"></i> Cancelar
+                    </button>` 
                     : ''}
             </div>
         </div>
